@@ -25,7 +25,10 @@
    					<% columns.each do |column| %>
     				<td><%= resource.try(column.name.to_sym) %></td> 
     				<% end %>
-    				<td><input type="image" src="/assets/railgun/icn_edit.png" title="Edit"><input type="image" src="/assets/railgun/icn_trash.png" title="Trash"></td> 
+    				<td>
+    					<a href="<%= url_for([:edit, resource]) %>"><input type="image" src="/assets/railgun/icn_edit.png" title="Edit"></a>
+    					<input type="image" src="/assets/railgun/icn_trash.png" title="Trash">
+    				</td> 
 				</tr> 
 			<% end %> 
 			</tbody> 

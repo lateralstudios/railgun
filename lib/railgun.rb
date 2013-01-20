@@ -11,6 +11,7 @@ module Railgun
 	autoload :Interface, 'railgun/interface'
 	autoload :Configuration, 'railgun/configuration'
 	autoload :Resource, 'railgun/resource'
+	autoload :Action, 'railgun/action'
 	
 	class << self
     

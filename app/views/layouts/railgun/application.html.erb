@@ -71,12 +71,18 @@
 		<form class="quick_search">
 			<input type="text" value="Quick Search" onfocus="if(!this._haschanged){this.value=''};this._haschanged=true;">
 		</form>
-		-->
 		<hr/>
+		-->
+		<% if Railgun.resource %>
+		<h3>Content</h3>
+		<ul class="toggle">
+			<li class="icn_new_article"><a href="<%= url_for([:new, Railgun.resource.to_sym]) %>">New <%= Railgun.resource.name %></a></li>
+		</ul>
+		<% end %>
 		<h3>Resources</h3>
 		<ul class="toggle">
-			<% Railgun.application.resources.each_pair do |key, resource| %>
-			<li class="icn_<%= resource.options[:type] %>"><a href="<%= url_for(resource.resource_class) %>"><%= resource.name %></a></li>
+			<% Railgun.resources.each_pair do |key, resource| %>
+			<li class="icn_<%= resource.options[:type] %>"><a href="<%= url_for(resource.resource_class) %>"><%= resource.name.pluralize %></a></li>
 			<% end %>
 		</ul>
 		<!--

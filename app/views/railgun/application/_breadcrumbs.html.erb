@@ -3,10 +3,9 @@
 	<% count = 1 %>
 	<% Railgun.interface.breadcrumbs.each do |crumb| %>
 	<div class="breadcrumb_divider"></div> 
-	<% if count < Railgun.interface.breadcrumbs.length-1 %>
-	<a href="<%= url_for(crumb[:path]) %>"><%= crumb[:title] %></a>
-	<% else %>
-	<a class="current"><%= crumb[:title] %></a>
-	<% end %>
+	<a href="<%= url_for(crumb[:path]) %>" <%= "class='current'" if count < Railgun.interface.breadcrumbs.length-1 %>>
+		<%= crumb[:title] %>
+	</a>
+	<% count+= 1 %>
 	<% end %>
 </article>

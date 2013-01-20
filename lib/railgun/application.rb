@@ -5,7 +5,7 @@
 module Railgun
 	class Application
 	
-		attr_accessor :config, :resources, :interface, :current_resource, :current_action
+		attr_accessor :config, :resources, :interface, :current_resource, :current_action, :active_resource
 	
 		@@loaded = false
 		
@@ -30,11 +30,15 @@ module Railgun
 		end
 		
 		def load_resource_by_path(path)
-			path_array = path.split("/")
-			self.current_resource = resources.find{|index, resource| resource.path == path_array[0] }.try(:last)
-			unless current_resource.nil?
-				self.current_action = current_resource.actions.select{|a| a == path_array[1].try(:to_sym) || :index }.try(:first)
+			path_array = path.split("/") # From the namespace
+			self.current_resource = self.find_resource_by_path(path_array[0])
+			unless path_array[1].nil? || current_resource.nil?
+				self.current_action = current_resource.actions.try(:select){|a| a == path_array[1].try(:to_sym) || :index }.try(:first)
 			end
+		end
+		
+		def find_resource_by_path(path)
+			resources.find{|index, resource| resource.path == path }.try(:last)
 		end
 		
 		def find_or_create_resource(resource)
