@@ -1,0 +1,18 @@
+<div class="row-fluid sortable">		
+	<div class="box span12">
+		<div class="box-header" data-original-title>
+			<h2><i class="icon-<%= railgun_resource.options[:icon] %>"></i><span class="break"></span>View <%= railgun_resource.name %></h2>
+			<div class="box-icon">
+				<a href="<%= url_for([:edit, resource]) %>" class="btn-new">Edit <i class="icon-pencil"></i></a>
+			</div>
+		</div>
+		<div class="box-content">
+			<h1><%= railgun_resource.name %> <%= resource.try(railgun_resource.name_column)%></h1>    
+			<hr />   
+			<% editable_columns.each do |column| %>
+			<p><strong><%= column[:name].humanize %>:</strong> <%= resource.send(column[:name]) %></p>
+			<% end %>   
+		</div>
+	</div><!--/span-->
+
+</div><!--/row-->

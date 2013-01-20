@@ -7,7 +7,7 @@
 	
 	<div class="form-actions">
 		<%= f.button :submit, :class => "btn btn-primary" %>
-	  <button type="reset" class="btn">Cancel</button>
+		<%= link_to "Cancel", resource || collection, :class => "btn" %>
 	</div>
   </fieldset>
 <% end %>

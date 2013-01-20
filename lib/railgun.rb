@@ -31,20 +31,6 @@ module Railgun
 		application.interface
 	end
 	
-	# The active resource
-	def self.active_resource
-		application.active_resource
-	end
-	
-	# The active collection
-	def self.active_collection
-		
-	end
-	
-	def self.resource
-  	application.resource
-  end
-	
 	def self.resources
   	application.resources
   end
@@ -64,14 +50,10 @@ module Railgun
   	application.register_resource(resource, options, &block)
   end
   
-  def self.load_resource(path, *args)
-	  options = args.extract_options!
-  	path.slice!(mounted_at+"/")
-  	application.load_resource_by_path(path)
-  	unless resource.nil?  		
-  		application.load_action(options[:action]) if options[:action]
-  		application.load_active_resource(options[:id]) if options[:id]
-		end
+  def self.find_resource_from_url(path)
+  	path.slice!(mounted_at+"/") # Remove the namespace
+  	resource_path = path.split("/").first # Find the resource path
+  	resource = application.find_resource_by_path(resource_path)
   end
   
   def self.mounted_at

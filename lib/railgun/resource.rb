@@ -24,7 +24,7 @@ module Railgun
     
     def default_options
     	options = {
-    		:type => "folder",
+    		:icon => "folder-open",
 	    	:sort_order => Railgun.application.resources.count + 1
     	}
     end
@@ -45,18 +45,26 @@ module Railgun
     	self.collection_actions << Action.new(key, options, &block)
     end
     
+    def find_action(action)
+    	actions.try(:find){|a| a.key == action.to_sym }
+    end
+    
+    def find_record(id)
+    	resource_class.find_by_id(id)
+    end
+    
     def add_default_actions
-    	default_actions = [:edit, :update, :destroy, :index, :new, :create]
+    	default_actions = [:new, :create, :show, :edit, :update, :destroy, :index]
     	default_actions.each do |action|
 	    	case action
-	    	when :new, :create
+	    	when :new
 	    		new_action(action, :method => :get) if [:new].include?(action)
 	    		new_action(action, :method => :post) if [:create].include?(action)
-	    	when :edit, :update, :destroy
-	    		member_action(action, :method => :get) if [:edit].include?(action)
+	    	when :show, :edit, :update, :destroy
+	    		member_action(action, :method => :get) if [:show, :edit].include?(action)
 	    		member_action(action, :method => :put) if [:update].include?(action)
 	    		member_action(action, :method => :delete) if [:destroy].include?(action)
-	    	when :index
+	    	when :index, :create
 	    		collection_action(action, :method => :get) if [:index, :new].include?(action)
 	    		collection_action(action, :method => :post) if [:create].include?(action)
 	    	end

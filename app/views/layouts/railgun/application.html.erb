@@ -36,19 +36,10 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a class="brand" href="index.html"> <img alt="Optimus Dashboard" src="/assets/railgun/optimus/logo20.png" /> <span>Optimus Dashboard</span></a>
+				<a class="brand" href="<%= root_path %>"> <img alt="Optimus Dashboard" src="/assets/railgun/optimus/logo20.png" /> <span>Optimus Dashboard</span></a>
 								
 				<!-- start: Header Menu -->
 				<div class="btn-group pull-right" >
-					<a class="btn" href="#">
-						<i class="icon-warning-sign"></i><span class="hidden-phone hidden-tablet"> notifications</span> <span class="label label-important hidden-phone">2</span> <span class="label label-success hidden-phone">11</span>
-					</a>
-					<a class="btn" href="#">
-						<i class="icon-tasks"></i><span class="hidden-phone hidden-tablet"> tasks</span> <span class="label label-warning hidden-phone">17</span>
-					</a>
-					<a class="btn" href="#">
-						<i class="icon-envelope"></i><span class="hidden-phone hidden-tablet"> messages</span> <span class="label label-success hidden-phone">9</span>
-					</a>
 					<a class="btn" href="#">
 						<i class="icon-wrench"></i><span class="hidden-phone hidden-tablet"> settings</span>
 					</a>
@@ -80,10 +71,10 @@
 				<div class="nav-collapse sidebar-nav">
 					<ul class="nav nav-tabs nav-stacked main-menu">
 						<li class="nav-header hidden-tablet">Navigation</li>
-						<li><a href="index.html"><i class="icon-home"></i><span class="hidden-tablet"> Dashboard</span></a></li>
+						<li><a href="<%= root_path %>"><i class="icon-home"></i><span class="hidden-tablet"> Dashboard</span></a></li>
 						<% Railgun.resources.each_pair do |key, resource| %>
 						<li><a href="<%= url_for(resource.resource_class) %>">
-						<i class="icon-<%= resource.options[:type] %>-open"></i>
+						<i class="icon-<%= resource.options[:icon] %>"></i>
 						<span class="hidden-tablet"> <%= resource.name.pluralize %></span></a></li>
 						<% end %>
 					</ul>
@@ -130,8 +121,8 @@
 		<hr>
 		
 		<footer>
-			<p class="pull-left">&copy; <a href="" target="_blank">creativeLabs</a> 2012</p>
-			<p class="pull-right">Powered by: <a href="#">Optimus Dashboard</a></p>
+			<p class="pull-left">&copy; <a href="" target="_blank">Lateral Studios</a> 2012</p>
+			<p class="pull-right"><a href="#">Powered by Railgun</a></p>
 		</footer>
 				
 	</div><!--/.fluid-container-->

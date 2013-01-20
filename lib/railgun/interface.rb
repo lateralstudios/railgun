@@ -15,8 +15,8 @@ module Railgun
 		def add_crumb(*args)
 			self.breadcrumbs ||= []
 			crumb = {
-				:title => @application.current_action.to_s.humanize,
-				:path => [@application.current_resource.try(:resource_class), @application.current_action]
+				:title => nil,
+				:path => ""
 			}
 			options = args.extract_options!
 			crumb.merge!(options)
