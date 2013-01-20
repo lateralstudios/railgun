@@ -29,12 +29,20 @@ module Railgun
 			yield(railgun_resource)
 		end
 		
+		def load_action(action)
+			self.current_action = current_resource.actions.try(:select){|a| a.key == action }.try(:first)
+		end
+		
+		def load_active_resource(id)
+			self.active_resource = current_resource.resource_class.find_by_id(id)
+		end
+		
 		def load_resource_by_path(path)
 			path_array = path.split("/") # From the namespace
 			self.current_resource = self.find_resource_by_path(path_array[0])
-			unless path_array[1].nil? || current_resource.nil?
-				self.current_action = current_resource.actions.try(:select){|a| a == path_array[1].try(:to_sym) || :index }.try(:first)
-			end
+			# Reset the resource dependant variables
+			self.current_action = nil
+			self.active_resource = nil
 		end
 		
 		def find_resource_by_path(path)

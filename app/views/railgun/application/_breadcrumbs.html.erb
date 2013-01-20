@@ -1,11 +1,13 @@
-<article class="breadcrumbs">
-	<a href="<%= root_path %>">Website Admin</a> 
+<ul class="breadcrumb">
+	<li>
+		<a href="<%= root_path %>">Home</a> <span class="divider">/</span>
+	</li>
 	<% count = 1 %>
 	<% Railgun.interface.breadcrumbs.each do |crumb| %>
-	<div class="breadcrumb_divider"></div> 
-	<a href="<%= url_for(crumb[:path]) %>" <%= "class='current'" if count < Railgun.interface.breadcrumbs.length-1 %>>
-		<%= crumb[:title] %>
-	</a>
+	<li<%= " class=active" if count >= Railgun.interface.breadcrumbs.length %>>
+	<a href="<%= url_for(crumb[:path]) %>"><%= crumb[:title] %></a>
+	<% if count < Railgun.interface.breadcrumbs.length then %><span class="divider">/</span><% end %>
+	</li>
 	<% count+= 1 %>
 	<% end %>
-</article>
+</ul>

@@ -5,11 +5,14 @@
 module Railgun
 	class Resource
 	
-		attr_accessor :name, :resource_class, :options, :sort_order, :path, :actions, :new_actions, :member_actions, :collection_actions
+		attr_accessor :name, :resource_class, :columns, :name_column, :options, 
+								:sort_order, :path, :new_actions, :member_actions, :collection_actions
 		
 		def initialize(resource, options = {})
       self.name = "#{resource.name}"
       self.resource_class = resource
+      self.columns = process_columns
+      self.name_column = find_name_column
       self.options = default_options.merge(options)
       self.sort_order = options[:sort_order]
       self.path = to_resource_path
@@ -24,6 +27,10 @@ module Railgun
     		:type => "folder",
 	    	:sort_order => Railgun.application.resources.count + 1
     	}
+    end
+    
+    def actions
+    	actions = [new_actions, member_actions, collection_actions].flatten!
     end
     
     def new_action(key, options = {}, &block)
@@ -54,6 +61,34 @@ module Railgun
 	    		collection_action(action, :method => :post) if [:create].include?(action)
 	    	end
 	    end
+    end
+    
+    def process_columns
+    	columns = []
+    	ar_columns = resource_class.columns
+    	ar_columns.each do |ar_column|
+    		columns << {
+	    		:name => ar_column.name,
+	    		:sql_type => ar_column.sql_type,
+	    		:null => ar_column.null,
+	    		:limit => ar_column.limit,
+	    		:precision => ar_column.precision,
+	    		:scale => ar_column.scale,
+	    		:type => ar_column.type,
+	    		:default => ar_column.default,
+	    		:primary => ar_column.primary,
+	    		:coder => ar_column.coder,
+	    		:collation => ar_column.collation,
+    		}
+    	end
+    	columns
+    end
+    
+    def find_name_column
+    	return :title if resource_class.column_names.include?("title")
+    	return :name if resource_class.column_names.include?("name")
+    	return :username if resource_class.column_names.include?("username")
+    	return :id if resource_class.column_names.include?("id")
     end
     
     def to_resource_path

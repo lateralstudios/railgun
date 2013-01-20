@@ -13,7 +13,7 @@ module Railgun
   	end
   	
   	def load_resource 
-  		Railgun.load_resource(request.fullpath)
+  		Railgun.load_resource(request.fullpath, :action => params[:action], :id => params[:id])
   	end
   	
   end

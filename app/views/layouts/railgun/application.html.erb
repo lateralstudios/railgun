@@ -1,133 +1,142 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="utf-8"/>
-	<title>Dashboard I Admin Panel</title>
+	
+	<!-- start: Meta -->
+	<meta charset="utf-8">
+	<title>Optimus Dashboard</title>
+	<meta name="description" content="Optimus Dashboard Bootstrap Admin Template.">
+	<meta name="author" content="Łukasz Holeczek">
+	<!-- end: Meta -->
+	
+	<!-- start: Mobile Specific -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- end: Mobile Specific -->
 	
 	<%= stylesheet_link_tag "railgun/application" %>
+
+	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
-	<link rel="stylesheet" href="css/ie.css" type="text/css" media="screen" />
-	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-	<%= javascript_include_tag "railgun/application" %>
-	<script type="text/javascript">
-	$(document).ready(function() 
-    	{ 
-      	  $(".tablesorter").tablesorter(); 
-   	 } 
-	);
-	$(document).ready(function() {
 
-	//When page loads...
-	$(".tab_content").hide(); //Hide all content
-	$("ul.tabs li:first").addClass("active").show(); //Activate first tab
-	$(".tab_content:first").show(); //Show first tab content
-
-	//On Click Event
-	$("ul.tabs li").click(function() {
-
-		$("ul.tabs li").removeClass("active"); //Remove any "active" class
-		$(this).addClass("active"); //Add "active" class to selected tab
-		$(".tab_content").hide(); //Hide all tab content
-
-		var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
-		$(activeTab).fadeIn(); //Fade in the active ID content
-		return false;
-	});
-
-});
-    </script>
-    <script type="text/javascript">
-    $(function(){
-        $('.column').equalHeight();
-    });
-</script>
-
+	<!-- start: Favicon -->
+	<link rel="shortcut icon" href="/assets/railgun/optimus/favicon.ico">
+	<!-- end: Favicon -->
+		
 </head>
 
-
 <body>
-
-	<header id="header">
-		<hgroup>
-			<h1 class="site_title"><a href="<%= root_path %>"><%= site_name %> Admin</a></h1>
-			<h2 class="section_title">Dashboard</h2><div class="btn_view_site"><a href="/">View Site</a></div>
-		</hgroup>
-	</header> <!-- end of header bar -->
-	
-	<section id="secondary_bar">
-		<div class="user">
-			<p>Admin (<a href="#">Logout</a>)</p>
-			<!-- <a class="logout_user" href="#" title="Logout">Logout</a> -->
+		<!-- start: Header -->
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a class="brand" href="index.html"> <img alt="Optimus Dashboard" src="/assets/railgun/optimus/logo20.png" /> <span>Optimus Dashboard</span></a>
+								
+				<!-- start: Header Menu -->
+				<div class="btn-group pull-right" >
+					<a class="btn" href="#">
+						<i class="icon-warning-sign"></i><span class="hidden-phone hidden-tablet"> notifications</span> <span class="label label-important hidden-phone">2</span> <span class="label label-success hidden-phone">11</span>
+					</a>
+					<a class="btn" href="#">
+						<i class="icon-tasks"></i><span class="hidden-phone hidden-tablet"> tasks</span> <span class="label label-warning hidden-phone">17</span>
+					</a>
+					<a class="btn" href="#">
+						<i class="icon-envelope"></i><span class="hidden-phone hidden-tablet"> messages</span> <span class="label label-success hidden-phone">9</span>
+					</a>
+					<a class="btn" href="#">
+						<i class="icon-wrench"></i><span class="hidden-phone hidden-tablet"> settings</span>
+					</a>
+					<!-- start: User Dropdown -->
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						<i class="icon-user"></i><span class="hidden-phone hidden-tablet"> admin</span>
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="#">Profile</a></li>
+						<li class="divider"></li>
+						<li><a href="login.html">Logout</a></li>
+					</ul>
+					<!-- end: User Dropdown -->
+				</div>
+				<!-- end: Header Menu -->
+				
+			</div>
 		</div>
-		<div class="breadcrumbs_container">
-			<%= render :partial => "breadcrumbs" %>
-		</div>
-	</section><!-- end of secondary bar -->
+	</div>
+	<div id="under-header"></div>
+	<!-- start: Header -->
 	
-	<aside id="sidebar" class="column">
-		<!--
-		<form class="quick_search">
-			<input type="text" value="Quick Search" onfocus="if(!this._haschanged){this.value=''};this._haschanged=true;">
-		</form>
-		<hr/>
-		-->
-		<% if Railgun.resource %>
-		<h3>Content</h3>
-		<ul class="toggle">
-			<li class="icn_new_article"><a href="<%= url_for([:new, Railgun.resource.to_sym]) %>">New <%= Railgun.resource.name %></a></li>
-		</ul>
-		<% end %>
-		<h3>Resources</h3>
-		<ul class="toggle">
-			<% Railgun.resources.each_pair do |key, resource| %>
-			<li class="icn_<%= resource.options[:type] %>"><a href="<%= url_for(resource.resource_class) %>"><%= resource.name.pluralize %></a></li>
-			<% end %>
-		</ul>
-		<!--
-		<h3>Content</h3>
-		<ul class="toggle">
-			<li class="icn_new_article"><a href="#">New Article</a></li>
-			<li class="icn_edit_article"><a href="#">Edit Articles</a></li>
-			<li class="icn_categories"><a href="#">Categories</a></li>
-			<li class="icn_tags"><a href="#">Tags</a></li>
-		</ul>
-		<h3>Users</h3>
-		<ul class="toggle">
-			<li class="icn_add_user"><a href="#">Add New User</a></li>
-			<li class="icn_view_users"><a href="#">View Users</a></li>
-			<li class="icn_profile"><a href="#">Your Profile</a></li>
-		</ul>
-		<h3>Media</h3>
-		<ul class="toggle">
-			<li class="icn_folder"><a href="#">File Manager</a></li>
-			<li class="icn_photo"><a href="#">Gallery</a></li>
-			<li class="icn_audio"><a href="#">Audio</a></li>
-			<li class="icn_video"><a href="#">Video</a></li>
-		</ul>
-		<h3>Admin</h3>
-		<ul class="toggle">
-			<li class="icn_settings"><a href="#">Options</a></li>
-			<li class="icn_security"><a href="#">Security</a></li>
-			<li class="icn_jump_back"><a href="#">Logout</a></li>
-		</ul>
-		-->
+		<div class="container-fluid">
+		<div class="row-fluid">
+				
+			<!-- start: Main Menu -->
+			<div class="span2 main-menu-span">
+				<div class="nav-collapse sidebar-nav">
+					<ul class="nav nav-tabs nav-stacked main-menu">
+						<li class="nav-header hidden-tablet">Navigation</li>
+						<li><a href="index.html"><i class="icon-home"></i><span class="hidden-tablet"> Dashboard</span></a></li>
+						<% Railgun.resources.each_pair do |key, resource| %>
+						<li><a href="<%= url_for(resource.resource_class) %>">
+						<i class="icon-<%= resource.options[:type] %>-open"></i>
+						<span class="hidden-tablet"> <%= resource.name.pluralize %></span></a></li>
+						<% end %>
+					</ul>
+				</div><!--/.well -->
+			</div><!--/span-->
+			<!-- end: Main Menu -->
+			
+			<noscript>
+				<div class="alert alert-block span10">
+					<h4 class="alert-heading">Warning!</h4>
+					<p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use this site.</p>
+				</div>
+			</noscript>
+			
+			<div id="content" class="span10">
+			<!-- start: Content -->
+			
+			<div>
+				<%= render :partial => "breadcrumbs" %>
+			</div>
+			
+       
+       <%= yield %>
+       
+					<!-- end: Content -->
+			</div><!--/#content.span10-->
+				</div><!--/fluid-row-->
+				
+		<div class="modal hide fade" id="myModal">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h3>Settings</h3>
+			</div>
+			<div class="modal-body">
+				<p>Here settings can be configured...</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn" data-dismiss="modal">Close</a>
+				<a href="#" class="btn btn-primary">Save changes</a>
+			</div>
+		</div>
+		
+		<div class="clearfix"></div>
+		<hr>
 		
 		<footer>
-			<hr />
-			<p><strong>Railgun &copy; Lateral Studios</strong></p>
-			<p>Theme by <a href="http://www.medialoot.com">MediaLoot</a></p>
+			<p class="pull-left">&copy; <a href="" target="_blank">creativeLabs</a> 2012</p>
+			<p class="pull-right">Powered by: <a href="#">Optimus Dashboard</a></p>
 		</footer>
-	</aside><!-- end of sidebar -->
+				
+	</div><!--/.fluid-container-->
+
+	<%= javascript_include_tag "railgun/application" %>
 	
-	<section id="main" class="column">
-		
-		<%= yield %>
-		<div class="spacer"></div>
-	</section>
-
-
 </body>
-
 </html>
