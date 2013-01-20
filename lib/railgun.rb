@@ -8,6 +8,7 @@ require "railgun/engine"
 module Railgun
 	
 	autoload :Application, 'railgun/application'
+	autoload :Interface, 'railgun/interface'
 	autoload :Configuration, 'railgun/configuration'
 	autoload :Resource, 'railgun/resource'
 	
@@ -23,6 +24,10 @@ module Railgun
 	
 	def self.config
 		application.config
+	end
+	
+	def self.interface
+		application.interface
 	end
 	
 	def self.resource

@@ -8,6 +8,10 @@ module Railgun
   		Railgun.config.site_name
   	end
   	
+  	def root_path
+  		Railgun.config.mounted_path
+  	end
+  	
   	def load_resource 
   		Railgun.load_resource(request.fullpath)
   	end

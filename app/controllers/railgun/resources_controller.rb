@@ -3,6 +3,8 @@ module Railgun
 	
 		helper_method :collection, :columns, :railgun_resource
 		
+		before_filter :prepare_layout
+		
 		def index
 			
 		end
@@ -20,6 +22,11 @@ module Railgun
 		end
 		
 protected
+
+		def prepare_layout
+			Railgun.interface.clear_crumbs
+			Railgun.interface.add_crumb(:title => railgun_resource.name, :path => [railgun_resource.resource_class])
+		end
 		
 		def beginning_of_association_scope
 			resource_class

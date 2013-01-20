@@ -1,7 +1,8 @@
 class Railgun::DashboardController < Railgun::ApplicationController
 
 	def index
-		render :layout => 'railgun/application'
+		Railgun.interface.clear_crumbs
+		Railgun.interface.add_crumb(:title => "Dashboard", :path => {:controller => 'dashboard', :action => :index} )
 	end
 
 end 

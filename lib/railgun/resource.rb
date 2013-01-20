@@ -5,7 +5,7 @@
 module Railgun
 	class Resource
 	
-		attr_accessor :name, :resource_class, :options, :sort_order, :path
+		attr_accessor :name, :resource_class, :options, :sort_order, :path, :actions
 		
 		def initialize(resource, options = {})
       self.name = "#{resource.name.pluralize}"
@@ -13,6 +13,7 @@ module Railgun
       self.options = default_options.merge(options)
       self.sort_order = options[:sort_order]
       self.path = to_resource_path
+      self.actions = [:index, :new, :edit, :create, :update, :destroy]
     end
     
     def default_options
