@@ -5,7 +5,7 @@
 module Railgun
 	class Application
 	
-		attr_accessor :config, :resources
+		attr_accessor :config, :resources, :current_resource
 	
 		@@loaded = false
 		
@@ -13,6 +13,10 @@ module Railgun
       self.config = Configuration.new unless @config
       @config
     end
+    
+    def resource
+			self.current_resource
+		end
 		
 		def configure
 			self.resources ||= {}
@@ -22,11 +26,14 @@ module Railgun
 		def register_resource(resource, options = {}, &block)
 			railgun_resource = find_or_create_resource(resource)
 			yield(railgun_resource)
-			raise railgun_resource.name.inspect
+		end
+		
+		def load_resource_by_path(path)
+			self.current_resource = resources.find{|index, resource| resource.path == path }.try(:last)
 		end
 		
 		def find_or_create_resource(resource)
-			name = resource.name
+			name = Resource.string_to_sym(resource.name)
 			if resources[name]
 				resources[name]
 			else

@@ -1,3 +1,4 @@
+require "inherited_resources"
 require "railgun/engine"
 
 ####
@@ -23,6 +24,14 @@ module Railgun
 	def self.config
 		application.config
 	end
+	
+	def self.resource
+  	application.resource
+  end
+	
+	def self.resources
+  	application.resources
+  end
 
 	def self.configure
     application.configure
@@ -30,13 +39,22 @@ module Railgun
     after_configure
   end
   
+  def self.after_configure
+  	application.prevent_rails_loading_railgun_paths
+  	application.load_railgun_paths
+  end
+  
   def self.register_resource(resource, options = {}, &block)
   	application.register_resource(resource, options, &block)
   end
   
-  def self.after_configure
-  	application.prevent_rails_loading_railgun_paths
-  	application.load_railgun_paths
+  def self.load_resource(path)
+  	path.slice!(mounted_at+"/")
+  	application.load_resource_by_path(path)
+  end
+  
+  def self.mounted_at
+  	config.mounted_at
   end
 	
 end

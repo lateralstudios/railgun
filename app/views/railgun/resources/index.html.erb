@@ -1,0 +1,37 @@
+<article class="module width_full">
+		<header><h3 class="tabs_involved"><%= railgun_resource.name %></h3>
+		<ul class="tabs">
+   			<li><a href="#tab1">Posts</a></li>
+    		<li><a href="#tab2">Comments</a></li>
+		</ul>
+		</header>
+
+		<div class="tab_container">
+			<div id="tab1" class="tab_content">
+			<table class="tablesorter" cellspacing="0"> 
+			<thead> 
+				<tr> 
+   					<th></th> 
+   					<% columns.each do |column| %>
+    				<th><%= column.name.humanize %></th> 
+    				<% end %>
+    				<th></th>
+				</tr> 
+			</thead> 
+			<tbody> 
+			<% collection.all.each do |resource| %>
+				<tr> 
+   					<td><input type="checkbox"></td> 
+   					<% columns.each do |column| %>
+    				<td><%= resource.try(column.name.to_sym) %></td> 
+    				<% end %>
+    				<td><input type="image" src="/assets/railgun/icn_edit.png" title="Edit"><input type="image" src="/assets/railgun/icn_trash.png" title="Trash"></td> 
+				</tr> 
+			<% end %> 
+			</tbody> 
+			</table>
+			</div><!-- end of #tab1 -->
+			
+		</div><!-- end of .tab_container -->
+		
+		</article><!-- end of content manager article -->
