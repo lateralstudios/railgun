@@ -2,7 +2,7 @@
   <fieldset>
 	
 	<% editable_columns.each do |column| %>
-	<%= render :partial => "railgun/resources/fields/"+column[:type].to_s, :locals => {:form => f, :column => column, :resource => resource} %>
+	<%= render :partial => "railgun/resources/fields/"+column.type.to_s, :locals => {:form => f, :column => column, :resource => resource} %>
 	<% end %>
 	
 	<div class="form-actions">

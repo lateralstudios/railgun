@@ -96,6 +96,12 @@
 				<%= render :partial => "breadcrumbs" %>
 			</div>
 			
+			<% if flash[:alert].present? %>
+			<div class="alert alert-error no-bottom">
+				<button data-dismiss="alert" class="close" type="button">×</button>
+				<strong>Something went wrong.</strong> Check the form for more information.
+			</div>
+			<% end %>
        
        <%= yield %>
        

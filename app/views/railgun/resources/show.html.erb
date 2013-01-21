@@ -10,7 +10,7 @@
 			<h1><%= railgun_resource.name %> <%= resource.try(railgun_resource.name_column)%></h1>    
 			<hr />   
 			<% editable_columns.each do |column| %>
-			<p><strong><%= column[:name].humanize %>:</strong> <%= resource.send(column[:name]) %></p>
+			<p><strong><%= column.name.humanize %>:</strong> <%= resource.send(column.name) %></p>
 			<% end %>   
 		</div>
 	</div><!--/span-->

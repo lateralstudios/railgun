@@ -5,17 +5,25 @@
 module Railgun
 	class Resource
 	
-		attr_accessor :name, :resource_class, :columns, :name_column, :options, 
+		attr_accessor :name, :resource_class, :columns, :viewable_columns, :editable_columns, :name_column, :options, 
 								:sort_order, :path, :new_actions, :member_actions, :collection_actions
 		
 		def initialize(resource, options = {})
+			# Customisable name
       self.name = "#{resource.name}"
+      # The actual class
       self.resource_class = resource
-      self.columns = process_columns
+      # Process the columns
+      self.columns = resource_class.columns
+      self.viewable_columns = columns.select{|c| true }
+      self.editable_columns = columns.select{|c| !c.primary && !%w(created_at updated_at).include?(c.name) }
       self.name_column = find_name_column
+      # Filter out the user options
       self.options = default_options.merge(options)
+      # A few helper methods
       self.sort_order = options[:sort_order]
       self.path = to_resource_path
+      # Build the actions
       self.new_actions = []
       self.member_actions = []
       self.collection_actions = []
@@ -71,9 +79,8 @@ module Railgun
 	    end
     end
     
-    def process_columns
+    def process_ar_columns(ar_columns)
     	columns = []
-    	ar_columns = resource_class.columns
     	ar_columns.each do |ar_column|
     		columns << {
 	    		:name => ar_column.name,

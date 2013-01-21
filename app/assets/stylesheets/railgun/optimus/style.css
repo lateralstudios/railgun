@@ -71,6 +71,14 @@ h6 {
 	line-height: 12px;
 }
 
+.table td.right{
+	text-align: right;
+}
+
+.table td.center{
+	text-align: center;
+}
+
 .well {
 	border: 1px solid #ddd;
 	background-color: #f6f6f6;
@@ -207,6 +215,32 @@ h6 {
 	margin: -12px 10px -10px 10px;
 	padding: 12px 0px 10px 0px;
 	
+}
+
+.box-header .btn-toolbar {
+	float:right;
+	margin-top: -3px;
+}
+
+#resource_filters .btn-toolbar{
+	margin-bottom: 0;
+	margin-top:0;
+}
+
+#resource_filters .form-search{
+	margin-bottom:0;
+}
+
+.box-header .btn-toolbar .btn-group:first-child{
+	margin-left:0;
+	padding-left:0;
+	border-left:none;
+}
+
+.box-header .btn-toolbar .btn-group{
+	margin-left:10px;
+	padding-left:10px;
+	border-left:1px solid #DDDDDD;
 }
 
 .box-header .box-icon {
@@ -816,10 +850,18 @@ ul.dashboard-list li a span {
 	line-height: 18px;
 	margin-bottom: 15px;
 	position: relative;
-	padding: 14px 40px 14px 18px;
+	padding: 8px 40px 8px 18px;
 	-webkit-box-shadow:  0px 1px 1px 0px rgba(180, 180, 180, 0.1);
 	box-shadow:  0px 1px 1px 0px rgba(180, 180, 180, 0.1);
 }
+
+.alert.no-bottom{
+	margin-bottom:0;
+}
+
+	.alert button.close{
+		line-height:18px;
+	}
 
 .alert.alert-success {
 	background-color: #edf6e5 !important;

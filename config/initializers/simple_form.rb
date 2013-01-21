@@ -5,8 +5,8 @@ SimpleForm.setup do |config|
   # wrapper, change the order or even add your own to the
   # stack. The options given below are used to wrap the
   # whole input.
-  config.wrappers :default, :class => :input,
-    :hint_class => :field_with_hint, :error_class => :field_with_errors do |b|
+  config.wrappers :default, :class => 'control-group',
+    :hint_class => :field_with_hint, :error_class => :error do |b|
     ## Extensions enabled by default
     # Any of these extensions can be disabled for a
     # given input by passing: `f.input EXTENSION_NAME => false`.
@@ -41,9 +41,11 @@ SimpleForm.setup do |config|
 
     ## Inputs
     b.use :label
-    b.use :input, :wrap_with => { :tag => :div, :class => :controls }
-    b.use :hint,  :wrap_with => { :tag => :span, :class => :hint }
-    b.use :error, :wrap_with => { :tag => :span, :class => :error }
+    b.wrapper :tag => :div, :class => 'controls' do |component|
+    	component.use :input
+    	component.use :hint,  :wrap_with => { :tag => :span, :class => :hint }
+    	component.use :error, :wrap_with => { :tag => :span, :class => 'help-inline' }
+    end
     
   end
 
