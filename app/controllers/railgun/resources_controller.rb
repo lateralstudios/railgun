@@ -15,6 +15,7 @@ module Railgun
 		end
 		
 		def new
+			Railgun.interface.add_crumb(:title => "New", :path => [:new, railgun_resource.to_sym])
 			render railgun_template("resources/new")
 		end
 		

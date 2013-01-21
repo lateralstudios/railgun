@@ -1,7 +1,4 @@
 <ul class="breadcrumb">
-	<li>
-		<a href="<%= root_path %>">Home</a> <span class="divider">/</span>
-	</li>
 	<% count = 1 %>
 	<% Railgun.interface.breadcrumbs.each do |crumb| %>
 	<li<%= " class=active" if count >= Railgun.interface.breadcrumbs.length %>>
