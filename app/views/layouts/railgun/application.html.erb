@@ -26,7 +26,7 @@
 		
 </head>
 
-<body>
+<body class="<%= railgun_controller+" "+params[:action] %>">
 		<!-- start: Header -->
 	<div class="navbar">
 		<div class="navbar-inner">
@@ -71,9 +71,9 @@
 				<div class="nav-collapse sidebar-nav">
 					<ul class="nav nav-tabs nav-stacked main-menu">
 						<li class="nav-header hidden-tablet">Navigation</li>
-						<li><a href="<%= root_path %>"><i class="icon-home"></i><span class="hidden-tablet"> Dashboard</span></a></li>
+						<li<%= raw " class='active'" if railgun_controller == "dashboard" %>><a href="<%= root_path %>"><i class="icon-home"></i><span class="hidden-tablet"> Dashboard</span></a></li>
 						<% Railgun.resources.each_pair do |key, resource| %>
-						<li><a href="<%= url_for(resource.resource_class) %>">
+						<li<%= raw " class='active'" if railgun_controller == resource.path %>><a href="<%= url_for(resource.resource_class) %>">
 						<i class="icon-<%= resource.options[:icon] %>"></i>
 						<span class="hidden-tablet"> <%= resource.name.pluralize %></span></a></li>
 						<% end %>

@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jquery-rails"
   
   s.add_dependency "simple_form"
+  s.add_dependency "has_scope"
 
   s.add_development_dependency "mysql2"
 end

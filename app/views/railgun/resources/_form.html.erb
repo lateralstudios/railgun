@@ -1,13 +1,13 @@
-<%= simple_form_for resource || collection.new, :html => {:class => "form-horizontal"} do |f| %>
+<%= simple_form_for resource || resource_class.new, :html => {:class => "form-horizontal"} do |f| %>
   <fieldset>
 	
 	<% editable_columns.each do |column| %>
-	<%= render :partial => "railgun/resources/fields/"+column.type.to_s, :locals => {:form => f, :column => column, :resource => resource} %>
+		<%= render :partial => "railgun/resources/fields/"+column.type.to_s, :locals => {:form => f, :column => column, :resource => resource} %>
 	<% end %>
 	
 	<div class="form-actions">
 		<%= f.button :submit, :class => "btn btn-primary" %>
-		<%= link_to "Cancel", resource || collection, :class => "btn" %>
+		<%= link_to "Cancel", resource || [resource_class], :class => "btn" %>
 	</div>
   </fieldset>
 <% end %>

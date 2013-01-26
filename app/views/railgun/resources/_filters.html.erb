@@ -1,0 +1,15 @@
+<div id="resource_filters" class="row-fluid sortable">
+	<div class="btn-toolbar pull-left">
+		<div class="btn-group">
+			<% railgun_resource.scopes.each do |scope| %>
+	    <a class="btn<%= " active" if @current_scope == scope.key %>" href="<%= url_for params.merge({:scope => scope.key.to_s}) %>"><%= scope.name %></a>
+	    <% end %>
+	  </div>
+	</div> 
+	<form class="form-search pull-right">
+		<div class="input-append">
+	  	<input type="text" class="input-medium search-query" placeholder="Keywords">
+	  	<button type="submit" class="btn">Search</button>
+		</div>
+	</form>
+</div>

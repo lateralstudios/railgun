@@ -1,4 +1,10 @@
 require "simple_form"
+require "has_scope"
+
+require "railgun/application"
+require "railgun/interface"
+require "railgun/configuration"
+require "railgun/resource"
 require "railgun/engine"
 
 ####
@@ -6,12 +12,6 @@ require "railgun/engine"
 #### It acts as the interface, passing on the primary methods to the application
 ####
 module Railgun
-	
-	autoload :Application, 'railgun/application'
-	autoload :Interface, 'railgun/interface'
-	autoload :Configuration, 'railgun/configuration'
-	autoload :Resource, 'railgun/resource'
-	autoload :Action, 'railgun/action'
 	
 	class << self
     
@@ -50,10 +50,9 @@ module Railgun
   	application.register_resource(resource, options, &block)
   end
   
-  def self.find_resource_from_url(path)
-  	path.slice!(mounted_at+"/") # Remove the namespace
-  	resource_path = path.split("/").first # Find the resource path
-  	resource = application.find_resource_by_path(resource_path)
+  def self.find_resource_from_controller_name(controller)
+  	symbol = Railgun::Resource.string_to_sym(controller.singularize)
+  	resource = application.find_resource(symbol)
   end
   
   def self.mounted_at

@@ -7,7 +7,7 @@ module Railgun
 	
 		attr_accessor :config, :resources, :interface
 	
-		@@loaded = false
+		@railgun_loaded = false
 		
 		def config
       self.config = Configuration.new unless @config
@@ -22,11 +22,12 @@ module Railgun
 		
 		def register_resource(resource, options = {}, &block)
 			railgun_resource = find_or_create_resource(resource)
-			yield(railgun_resource)
+			register_resource_controller(railgun_resource)
+			railgun_resource.dsl.run_block(&block)
 		end
 		
-		def find_resource_by_path(path)
-			resources.find{|index, resource| resource.path == path }.try(:last)
+		def find_resource(symbol)
+			resources[symbol] || nil
 		end
 		
 		def find_or_create_resource(resource)
@@ -40,9 +41,9 @@ module Railgun
 		end
 	
 		def load_railgun_paths
-			return false if @@loaded
+			return false if @railgun_loaded
 	  	files_in_load_path.each{|file| load file }
-	  	@@loaded = true
+	  	@railgun_loaded = true
 	  end
 	  
 	  def files_in_load_path
@@ -56,6 +57,12 @@ module Railgun
 		    config.load_paths.include?(path)
 		  end
 		end
+
+private
+	
+		def register_resource_controller(resource)
+      eval "class #{resource.controller_name} < Railgun::ResourcesController; end"
+    end
 	
 	end
 end
