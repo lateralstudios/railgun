@@ -5,7 +5,7 @@ module Railgun
 		
 		before_filter :prepare_layout
 		
-		respond_to :html, :js, :json
+		respond_to :html, :js, :json, :xml
 		
 		def index
 			@current_scope = current_scope_key
@@ -64,10 +64,12 @@ module Railgun
 			end
 			run_action_block(:update)
 			if resource.save
-				redirect_to resource, :notice => railgun_resource.name+" updated successfully"
+				respond_with(resource) do |format|
+					format.html { redirect_to resource, :notice => railgun_resource.name+" updated successfully" }
+					format.json { render :json => resource }
+				end
 			else
-				flash.now[:alert] = "There were errors in your submission. Please check the form for more details"
-				render :edit, :locals => {:resource => resource}
+				respond_with(resource.errors)
 			end
 		end
 		alias_method :update!, :update

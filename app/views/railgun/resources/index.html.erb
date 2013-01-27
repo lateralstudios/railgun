@@ -2,7 +2,7 @@
   <thead>
 	  <tr>
 	  	<% viewable_columns.each do |column| %>
-			<th class="<%= column.type.to_s %>"><%= column.name.humanize %></th> 
+			<th class="<%= "#{column.name.to_s} #{column.type.to_s}" %>"><%= column.name.humanize %></th> 
 			<% end %>
 		  <th>Actions</th>
 	  </tr>
@@ -11,7 +11,7 @@
 	  <% collection.each do |resource| %>
 		<tr role="<%= resource.id %>">
 			<% viewable_columns.each do |column| %>
-			<td><%= short_format_column(resource, column) %></td> 
+			<td class="<%= "#{column.name.to_s} #{column.type.to_s}" %>"><%= short_format_column(resource, column) %></td> 
 			<% end %>
 			<td>
 			<div class="btn-toolbar">
