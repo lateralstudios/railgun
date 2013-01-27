@@ -17,17 +17,20 @@ module Railgun
       resource.controller.class_eval(&block) if block_given?
       resource.controller
     end
-		
-		def new_action(key, options = {}, &block)
-    	resource.new_actions << Railgun::Action.new(key, options, &block)
+    
+    def action(set, key, options, &block)
+    	set << Railgun::Action.new(key, options, &block)
+    	controller do 
+    		define_method(key, &block || Proc.new{})
+    	end
     end
     
     def member_action(key, options = {}, &block)
-    	resource.member_actions << Railgun::Action.new(key, options, &block)
+   	 	action(resource.member_actions, key, options, &block)
     end
     
     def collection_action(key, options = {}, &block)
-    	resource.collection_actions << Railgun::Action.new(key, options, &block)
+    	action(resource.collection_actions, key, options, &block)
     end
     
     def scope(key, *options)

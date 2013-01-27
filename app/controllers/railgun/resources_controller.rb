@@ -9,6 +9,8 @@ module Railgun
 		
 		def index
 			@current_scope = current_scope_key
+			Railgun.interface.set_title(railgun_resource.name.pluralize)
+			Railgun.interface.add_action_button(:default, "Add New", [:new, railgun_resource.to_sym], :type => "info")
 			run_action_block(:index)
 			render_railgun railgun_template("resources/index")
 		end
@@ -16,6 +18,9 @@ module Railgun
 		
 		def show 
 			Railgun.interface.add_crumb(:title => resource.send(railgun_resource.name_column), :path => [resource])
+			Railgun.interface.set_title("View "+railgun_resource.name)
+			Railgun.interface.add_action_button(:default, "Edit", [:edit, resource], :type => "info")
+			Railgun.interface.add_action_button(:destroy, "Delete", resource, :type => "danger", :method => :delete, :confirm => "Are you sure you want to delete this record?")
 			run_action_block(:show)
 			render_railgun railgun_template("resources/show")
 		end
@@ -91,7 +96,12 @@ protected
 		end
 		
 		def collection
-			@collection ||= apply_current_scope(end_of_association_chain)
+			if params[:action] == "index"
+				@collection ||= apply_current_scope(end_of_association_chain) 
+				@collection
+			else
+				nil
+			end
 		end
 		
 		def columns
@@ -152,13 +162,13 @@ private
 			if railgun_resource.nil? 
 				raise "Not found" # Should be not_found
 			end
-			Railgun.interface.clear_crumbs
+			Railgun.interface.reset
 			Railgun.interface.add_crumb(:title => railgun_resource.name.pluralize, :path => [railgun_resource.resource_class])
 		end
 		
 		def run_action_block(action)
 			action = railgun_resource.find_action(action)
-			action.block.call if action.block
+			instance_eval &action.block if action.block
 		end
 		
 	end

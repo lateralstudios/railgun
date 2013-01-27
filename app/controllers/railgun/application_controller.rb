@@ -1,8 +1,12 @@
 module Railgun
   class ApplicationController < ActionController::Base
   	
-  	helper_method :site_name, :railgun_controller
+  	helper_method :title, :site_name, :railgun_controller
   
+  	def title
+  		Railgun.interface.title
+  	end
+  	
   	def site_name
   		Railgun.config.site_name
   	end

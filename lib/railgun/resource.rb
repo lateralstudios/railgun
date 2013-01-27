@@ -78,8 +78,7 @@ module Railgun
     end
     
     def controller_name
-    	resource_controller = self.class.string_to_controller_name(resource_class.name)
-    	"Railgun::"+resource_controller
+    	self.class.string_to_controller_name(resource_class.name)
     end
     
     def self.string_to_sym(string)
@@ -91,7 +90,7 @@ module Railgun
     end
     
     def self.string_to_controller_name(string)
-    	string.pluralize.camelize+"Controller"
+    	"Railgun::"+string.pluralize.camelize+"Controller"
     end
   
 protected
@@ -108,15 +107,15 @@ protected
     	default_actions.each do |action|
 	    	case action
 	    	when :new
-	    		dsl.new_action(action, :method => :get) if [:new].include?(action)
-	    		dsl.new_action(action, :method => :post) if [:create].include?(action)
+	    		self.new_actions << Railgun::Action.new(action, :method => :get) if [:new].include?(action)
+	    		self.new_actions << Railgun::Action.new(action, :method => :post) if [:create].include?(action)
 	    	when :show, :edit, :update, :destroy
-	    		dsl.member_action(action, :method => :get) if [:show, :edit].include?(action)
-	    		dsl.member_action(action, :method => :put) if [:update].include?(action)
-	    		dsl.member_action(action, :method => :delete) if [:destroy].include?(action)
+	    		self.member_actions << Railgun::Action.new(action, :method => :get) if [:show, :edit].include?(action)
+	    		self.member_actions << Railgun::Action.new(action, :method => :put) if [:update].include?(action)
+	    		self.member_actions << Railgun::Action.new(action, :method => :delete) if [:destroy].include?(action)
 	    	when :index, :create
-	    		dsl.collection_action(action, :method => :get) if [:index, :new].include?(action)
-	    		dsl.collection_action(action, :method => :post) if [:create].include?(action)
+	    		self.collection_actions << Railgun::Action.new(action, :method => :get) if [:index, :new].include?(action)
+	    		self.collection_actions << Railgun::Action.new(action, :method => :post) if [:create].include?(action)
 	    	end
 	    end
     end

@@ -7,7 +7,9 @@ module Railgun
 		@@defaults = {
 			:site_title => "Railgun",
 			:mounted_at => "/railgun",
-			:load_paths => [File.expand_path('app/railgun', Rails.root)]
+			:load_paths => [File.expand_path('app/railgun', Rails.root)],
+			:register_stylesheets => [],
+			:register_javascripts => []
 		}
 		
 		cattr_accessor :settings

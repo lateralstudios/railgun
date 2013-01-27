@@ -34,7 +34,7 @@ module Railgun
   	
   	def short_format_text_column(resource, column)
   		value = resource.try(column.name.to_sym)
-  		truncate(value, :length => 50, :separator => ' ')
+  		truncate(value, :length => 100, :separator => ' ')
   	end
   	
   	def short_format_datetime_column(resource, column)

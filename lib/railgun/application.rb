@@ -21,8 +21,8 @@ module Railgun
 		end
 		
 		def register_resource(resource, options = {}, &block)
+			register_resource_controller(resource)
 			railgun_resource = find_or_create_resource(resource)
-			register_resource_controller(railgun_resource)
 			railgun_resource.dsl.run_block(&block)
 		end
 		
@@ -61,7 +61,7 @@ module Railgun
 private
 	
 		def register_resource_controller(resource)
-      eval "class #{resource.controller_name} < Railgun::ResourcesController; end"
+      eval "class #{Resource.string_to_controller_name(resource.name)} < Railgun::ResourcesController; end"
     end
 	
 	end
