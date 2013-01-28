@@ -33,6 +33,10 @@ module Railgun
     	action(resource.collection_actions, key, options, &block)
     end
     
+    def batch_action(key, &block)
+    	resource.batch_actions << Railgun::BatchAction.new(key, &block)
+    end
+    
     def scope(key, *options)
     	args = options.extract_options!
     	resource.scopes << Railgun::Scope.new(key, args)

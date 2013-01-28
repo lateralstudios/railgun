@@ -100,9 +100,16 @@
 			</div>
 			
 			<% if flash[:alert].present? %>
-			<div class="alert alert-error no-bottom">
+			<div class="alert alert-error">
 				<button data-dismiss="alert" class="close" type="button">×</button>
 				<strong>Something went wrong.</strong> Check the form for more information.
+			</div>
+			<% end %>
+			
+			<% if flash[:notice].present? %>
+			<div class="alert alert-success">
+				<button data-dismiss="alert" class="close" type="button">×</button>
+				<%= flash[:notice] %>
 			</div>
 			<% end %>
        

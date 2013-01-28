@@ -1,8 +1,41 @@
+<div class="btn-toolbar resource-listing-controls">	
+	<div class="btn-group pull-left">
+		<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
+			Batch actions
+			<span class="caret"></span>
+		</a>
+		<ul class="dropdown-menu">
+			<li><%= link_to "Delete", "#", :class => "batch-action", :data => {'batch-method' => "delete"} %></li>
+		</ul>
+	</div>
+</div>
+<%= form_tag [:batch_action, resource_class], :id => "batch_action" do %>
+<%= hidden_field_tag :batch_method %>
 <table class="resource_listing table table-striped table-bordered bootstrap-datatable datatable">
   <thead>
 	  <tr>
+	  	<th><%= check_box_tag 'batch_select_all', 1 %></th>
 	  	<% viewable_columns.each do |column| %>
-			<th class="<%= "#{column.name.to_s} #{column.type.to_s}" %>"><%= column.name.humanize %></th> 
+			<th class="<%= "#{column.name} #{column.type.to_s}" %>">
+				<% 
+				if params[:order]
+					order_params = params[:order].split("_")
+					sort_direction = order_params.slice!(-1)
+					sort_column = order_params.join("_")
+					if sort_column == column.name && sort_direction == "desc"
+						next_direction = "asc"
+					else	
+						next_direction = "desc"
+					end
+				elsif column.name == "id"
+					next_direction = "asc"
+				else
+					next_direction = "desc"
+				end
+				order_string = column.name+"_"+next_direction
+				%>
+				<%= link_to column.name.humanize, params.merge(:order => order_string), :class => "to_"+next_direction %>
+			</th> 
 			<% end %>
 		  <th>Actions</th>
 	  </tr>
@@ -10,6 +43,7 @@
   <tbody>
 	  <% collection.each do |resource| %>
 		<tr role="<%= resource.id %>">
+			<td class="batch_select"><%= check_box_tag 'batch_select[]', resource.id, false, :class => "batch_select", :id => "" %></td>
 			<% viewable_columns.each do |column| %>
 			<td class="<%= "#{column.name.to_s} #{column.type.to_s}" %>"><%= short_format_column(resource, column) %></td> 
 			<% end %>
@@ -32,3 +66,4 @@
 		<% end %> 
   </tbody>
 </table>
+<% end %>

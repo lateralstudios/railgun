@@ -9,6 +9,7 @@ Railgun::Engine.routes.draw do
           # eg: get :comment
           send(action.options[:method], action.key)
         end
+        send(:post, :batch_action)
       end
 			new do
       	resource.new_actions.each do |action|

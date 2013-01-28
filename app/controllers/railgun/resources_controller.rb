@@ -7,6 +7,18 @@ module Railgun
 		
 		respond_to :html, :js, :json, :xml
 		
+		has_scope :order, :default => "id_desc" do |controller, scope, value|
+			order_params = value.split("_")
+			direction = order_params.slice!(-1)
+			column = order_params.join("_")
+			order_string = column+" "+direction
+			scope.order(order_string)
+		end
+		
+		has_scope :scope do |controller, scope, value|
+			scope.send(value)
+		end
+		
 		def index
 			@current_scope = current_scope_key
 			Railgun.interface.set_title(railgun_resource.name.pluralize)
@@ -91,6 +103,15 @@ module Railgun
 		end
 		alias_method :destroy!, :destroy
 		
+		def batch_action
+			selection = params[:batch_select].map{|id| id.to_i }
+			run_batch_action_block(params[:batch_method].to_sym, selection)
+			respond_with(collection) do |format|
+				flash[:notice] = selection.count.to_s+" "+railgun_resource.name.downcase.pluralize+" affected"
+				format.html { redirect_to :action => :index}
+			end
+		end
+		
 protected		
 		
 		def resource
@@ -98,8 +119,8 @@ protected
 		end
 		
 		def collection
-			if params[:action] == "index"
-				@collection ||= apply_current_scope(end_of_association_chain) 
+			if params[:action] == "index" || params[:action] == "batch_action"
+				@collection ||= end_of_association_chain
 				@collection
 			else
 				nil
@@ -126,16 +147,13 @@ protected
 			@resource_class ||= railgun_resource.resource_class
 		end
 		
-		# Finds the current scope and applies it to [chain]
-		def apply_current_scope(chain)
-			end_of_railgun_scope = apply_scope(chain, current_scope_key)
-			# Apply has_scope
-			apply_scopes(end_of_railgun_scope)
-		end
-		
-		# Applies a [scope] key to [chain]
-		def apply_scope(chain, scope)
-			chain.send(scope)
+		# The end of our association chain, after all relationships have been applied
+		# This can be used to override the collection method
+		def end_of_association_chain
+			scope = beginning_of_association_chain
+			scope = scope.page(params[:page]).per(params[:per]) # Apply Kaminari pagination
+			scope = apply_scopes(scope) # Apply has_scope scopes
+			scope
 		end
 		
 		# Returns the current scope key, or default scope key
@@ -146,11 +164,6 @@ protected
 		# Find Railgun's default scope (if any)
 		def default_scope
 			railgun_resource.default_scope.try(:key)
-		end
-		
-		# The end of our association chain, after all relationships have been applied
-		def end_of_association_chain
-			beginning_of_association_chain
 		end
 		
 		# The beginning of our association chain, before all relationships are applied
@@ -171,6 +184,11 @@ private
 		def run_action_block(action)
 			action = railgun_resource.find_action(action)
 			instance_eval &action.block if action.block
+		end
+		
+		def run_batch_action_block(batch_action, selection)
+			batch_action = railgun_resource.find_batch_action(batch_action)
+			batch_action.block.yield(selection) if batch_action.block
 		end
 		
 	end

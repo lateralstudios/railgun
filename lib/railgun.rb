@@ -1,5 +1,6 @@
 require "simple_form"
 require "has_scope"
+require "kaminari"
 
 require "railgun/application"
 require "railgun/interface"

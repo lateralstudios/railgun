@@ -71,6 +71,11 @@ h6 {
 	line-height: 12px;
 }
 
+.resource-listing-controls{
+	margin-top:0;
+	height:24px;
+}
+
 .table td.right{
 	text-align: right;
 }

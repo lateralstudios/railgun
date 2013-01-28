@@ -1,5 +1,6 @@
 require "railgun/dsl"
 require "railgun/resource/action"
+require "railgun/resource/batch_action"
 require "railgun/resource/scope"
 
 ####
@@ -10,7 +11,7 @@ module Railgun
 	class Resource
 	
 		attr_accessor :name, :resource_class, :columns, :viewable_columns, :editable_columns, :name_column, :options, 
-								:sort_order, :path, :key, :new_actions, :member_actions, :collection_actions, :scopes
+								:sort_order, :path, :key, :new_actions, :member_actions, :collection_actions, :batch_actions, :scopes
 		
 		def initialize(resource, options = {})
 			# Customisable name
@@ -33,6 +34,9 @@ module Railgun
       self.member_actions = []
       self.collection_actions = []
       self.add_default_actions
+      # Build the batch actions
+      self.batch_actions = []
+      self.add_default_batch_actions
       # Build the scopes
       self.scopes = []
       self.add_default_scopes
@@ -59,6 +63,10 @@ module Railgun
     
     def find_action(action)
     	actions.try(:find){|a| a.key == action.to_sym }
+    end
+    
+    def find_batch_action(batch_action)
+    	batch_actions.try(:find){|b| b.key == batch_action.to_sym} 
     end
     
     def default_scope
@@ -118,6 +126,14 @@ protected
 	    		self.collection_actions << Railgun::Action.new(action, :method => :post) if [:create].include?(action)
 	    	end
 	    end
+    end
+    
+    def add_default_batch_actions
+    	dsl.batch_action :delete do |selection|
+    		resource_class.find(selection).each do |resource|
+    			resource.delete
+    		end
+    	end
     end
     
     def add_default_scopes
