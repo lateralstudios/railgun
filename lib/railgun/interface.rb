@@ -35,21 +35,32 @@ module Railgun
 			self.breadcrumbs << crumb
 		end
 		
-		def add_action_button_group(key)
-			self.action_button_groups ||= {}
-			self.action_button_groups[key] = {:buttons => []}
+		# Action buttons.. should these be a seperate object?
+		def add_action_button_group(key, position = action_button_groups.count)
+			self.action_button_groups ||= []
+			group = {
+				:key => key,
+				:buttons => []
+			}
+			self.action_button_groups.insert(position, group)
+			group
 		end
 		
-		def add_action_button(group, title, path, *args)
-			add_action_button_group(group) unless action_button_groups.try(:[], group)
+		def find_action_button_group(key)
+			action_button_groups.find{|g| g[:key] == key }
+		end
+		
+		def add_action_button(group_key, title, path, *args)
 			options = args.extract_options!
-			self.action_button_groups[group][:buttons] << {
+			group = find_action_button_group(group_key) || add_action_button_group(group_key)
+			position = options.delete(:position) || group[:buttons].count
+			group[:buttons].insert(position, {
 				:title => title,
 				:path => path,
 				:type => options.delete(:type) || "info",
 				:class => options.delete(:class) || "",
 				:options => options
-			}
+			})
 		end
     
     def clear_locals
@@ -61,7 +72,7 @@ module Railgun
     end
     
     def clear_interface_buttons
-    	self.action_button_groups = {}
+    	self.action_button_groups = []
     end
 		
 	end

@@ -4,7 +4,7 @@
 		<div class="box-header" data-original-title>
 			<h2><i class="icon-<%= railgun_resource.options[:icon] %>"></i><span class="break"></span><%= title %></h2>
 			<div class="btn-toolbar">
-				<% Railgun.interface.action_button_groups.each do |key, group| %>
+				<% interface.action_button_groups.reverse.each do |group| %>
 				<div class="btn-group">
 					<% group[:buttons].each do |button| %>
 					<%= link_to(button[:title], button[:path], button[:options].merge({:class => "btn btn-small btn-"+button[:type]+" "+button[:class]})) %>

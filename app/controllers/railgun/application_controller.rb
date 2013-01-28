@@ -1,26 +1,30 @@
 module Railgun
   class ApplicationController < ActionController::Base
   	
-  	helper_method :title, :site_name, :railgun_controller
+  	helper_method :title, :site_name, :railgun_controller, :interface
   
   	def title
-  		Railgun.interface.title
-  	end
-  	
-  	def site_name
-  		Railgun.config.site_name
+  		interface.title
   	end
   	
   	def railgun_controller
   		params[:controller].split("railgun/").last
   	end
   	
-  	def render_railgun(template)
-  		render template, :locals => Railgun.interface.locals
+  	def site_name
+  		Railgun.config.site_name
+  	end
+  	
+  	def interface
+  		Railgun.interface
   	end
   	
   	def railgun_template(template)
   		"railgun/"+template
+  	end
+  	
+  	def render_railgun(template)
+  		render template, :locals => Railgun.interface.locals
   	end
   	
   end
