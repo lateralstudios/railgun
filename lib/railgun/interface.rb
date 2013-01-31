@@ -23,6 +23,10 @@ module Railgun
     	self.locals.merge!(options)
     end
     
+    def clear_locals
+    	self.locals = {}
+    end
+    
     # add_crumb(*args)
 		def add_crumb(*args)
 			self.breadcrumbs ||= []
@@ -34,6 +38,10 @@ module Railgun
 			crumb.merge!(options)
 			self.breadcrumbs << crumb
 		end
+		
+		def clear_crumbs
+    	self.breadcrumbs = []
+    end
 		
 		# Action buttons.. should these be a seperate object?
 		def add_action_button_group(key, position = action_button_groups.count)
@@ -62,14 +70,6 @@ module Railgun
 				:options => options
 			})
 		end
-    
-    def clear_locals
-    	self.locals = {}
-    end
-    
-    def clear_crumbs
-    	self.breadcrumbs = []
-    end
     
     def clear_interface_buttons
     	self.action_button_groups = []
