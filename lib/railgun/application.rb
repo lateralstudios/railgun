@@ -21,9 +21,11 @@ module Railgun
 		end
 		
 		def register_resource(resource, options = {}, &block)
-			register_resource_controller(resource)
-			railgun_resource = find_or_create_resource(resource)
-			railgun_resource.dsl.run_block(&block)
+			if ActiveRecord::Base.connection.tables.include?(Resource.string_to_path(resource))
+				register_resource_controller(resource)
+				railgun_resource = find_or_create_resource(resource)
+				railgun_resource.dsl.run_block(&block)
+			end
 		end
 		
 		def find_resource(symbol)
