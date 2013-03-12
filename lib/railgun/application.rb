@@ -21,7 +21,7 @@ module Railgun
 		end
 		
 		def register_resource(resource, options = {}, &block)
-			if ActiveRecord::Base.connection.tables.include?(Resource.string_to_path(resource))
+			if ActiveRecord::Base.connection.tables.include?(resource.to_s.tableize)
 				register_resource_controller(resource)
 				railgun_resource = find_or_create_resource(resource)
 				railgun_resource.dsl.run_block(&block)
