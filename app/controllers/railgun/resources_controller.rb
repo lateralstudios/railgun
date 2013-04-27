@@ -1,11 +1,15 @@
 module Railgun
-	class ResourcesController < ApplicationController
+	class ResourcesController < RailgunController
+	
+		helper 'railgun/resource'
 	
 		helper_method :railgun_resource, :resource_class, :collection, :resource, :viewable_columns, :editable_columns, :columns
 		
 		before_filter :prepare_layout
 		
 		respond_to :html, :js, :json, :xml
+		
+		layout 'railgun/application'
 		
 		has_scope :order, :default => "id_desc" do |controller, scope, value|
 			order_params = value.split("_")
@@ -19,86 +23,96 @@ module Railgun
 			scope.send(value)
 		end
 		
-		def index
-			@current_scope = current_scope_key
-			Railgun.interface.set_title(railgun_resource.name.pluralize)
-			Railgun.interface.add_action_button(:default, "Add New", [:new, railgun_resource.to_sym], :type => "info")
-			run_action_block(:index)
-			render_railgun railgun_template("resources/index")
+		class << self
+      def railgun_resource=(resource)
+        @railgun_resource = resource
+
+        unless resource.nil?
+          defaults :resource_class => resource.resource_class#, :route_prefix => resource.route_prefix, :instance_name => resource.resource_name.singular
+        end
+      end
+
+      # Inherited Resources uses the inherited(base) hook method to
+      # add in the Base.resource_class class method. To override it, we
+      # need to install our resource_class method each time we're inherited from.
+      def inherited(base)
+        super(base)
+        base.load_railgun_resource
+        base.override_resource_class_methods!
+      end
+    end
+		
+		def index(options={}, &block)
+			update_action_block(:index, options, &block)
+			super(options) do |format|
+				@current_scope = current_scope_key
+				Railgun.interface.set_title(railgun_resource.name.pluralize)
+				Railgun.interface.add_action_button(:default, "Add New", [:new, railgun_resource.to_sym], :type => "info") 
+				run_action_block(:index, format)
+				format.html { render_railgun railgun_template("resources/index") }
+			end
 		end
 		alias_method :index!, :index
 		
-		def show 
-			Railgun.interface.add_crumb(:title => resource.send(railgun_resource.name_column), :path => [resource])
-			Railgun.interface.set_title("View "+railgun_resource.name)
-			Railgun.interface.add_action_button(:default, "Edit", [:edit, resource], :type => "info")
-			Railgun.interface.add_action_button(:destroy, "Delete", resource, :type => "danger", :method => :delete, :confirm => "Are you sure you want to delete this record?")
-			run_action_block(:show)
-			render_railgun railgun_template("resources/show")
+		def show(options={}, &block)
+			update_action_block(:show, options, &block)
+			super(options) do |format|
+				Railgun.interface.add_crumb(:title => resource.send(railgun_resource.name_column), :path => [resource])
+				Railgun.interface.set_title("View "+railgun_resource.name)
+				Railgun.interface.add_action_button(:default, "Edit", [:edit, resource], :type => "info")
+				Railgun.interface.add_action_button(:destroy, "Delete", resource, 
+					:type => "danger", :method => :delete, :confirm => "Are you sure you want to delete this record?") 
+				run_action_block(:show, format)
+				format.html { render_railgun railgun_template("resources/show") }
+			end
 		end
 		alias_method :show!, :show
 		
-		def new
-			Railgun.interface.add_crumb(:title => "New", :path => [:new, railgun_resource.to_sym])
-			run_action_block(:new)
-			render_railgun railgun_template("resources/new")
+		def new(options={}, &block)
+			update_action_block(:new, options, &block)
+			super(options) do |format|
+				Railgun.interface.add_crumb(:title => "New", :path => [:new, railgun_resource.to_sym])
+				run_action_block(:new, format)
+				format.html { render_railgun railgun_template("resources/new") }
+			end
 		end
 		alias_method :new!, :new
 		
-		def edit
-			Railgun.interface.add_crumb(:title => resource.send(railgun_resource.name_column), :path => [resource])
-			Railgun.interface.add_crumb(:title => "Edit", :path => [:edit, resource])
-			run_action_block(:edit)
-			render_railgun railgun_template("resources/edit")
+		def edit(options={}, &block)
+			update_action_block(:edit, options, &block)
+			super(options) do |format|
+				Railgun.interface.add_crumb(:title => resource.send(railgun_resource.name_column), :path => [resource])
+				Railgun.interface.add_crumb(:title => "Edit", :path => [:edit, resource])
+				run_action_block(:edit, format)
+				format.html { render_railgun railgun_template("resources/edit") }
+			end
 		end
 		alias_method :edit!, :edit
 		
-		def create
-			resource = resource_class.new
-			resource_params = params[railgun_resource.to_sym]
-			editable_columns.each do |column|
-				resource.send(column.name+"=", resource_params.try(:[], column.name))
-			end
-			run_action_block(:create)
-			if resource.save
-				redirect_to resource, :notice => railgun_resource.name+" created successfully"
-			else
-				flash.now[:alert] = "There were errors in your submission. Please check the form for more details"
-				render :edit, :locals => {:resource => resource}
+		def create(options={}, &block)
+			update_action_block(:create, options, &block)
+			super(options) do |success, failure|
+				run_action_block(:create, success, failure)
+				success.html { redirect_to :action => :index }
 			end
 		end
 		alias_method :create!, :create
 		
-		def update
-			resource_params = params[railgun_resource.to_sym]
-			editable_columns.each do |column|
-				resource.send(column.name+"=", resource_params.try(:[], column.name))
-			end
-			run_action_block(:update)
-			if resource.save
-				respond_with(resource) do |format|
-					format.html { redirect_to resource, :notice => railgun_resource.name+" updated successfully" }
-					format.json { render :json => resource }
-				end
-			else
-				respond_with(resource.errors)
+		def update(options={}, &block)
+			update_action_block(:update, options, &block)
+			super(options) do |success, failure|
+				run_action_block(:update, success, failure)
+				success.html { redirect_to :action => :index }
 			end
 		end
 		alias_method :update!, :update
 		
-		def destroy
-			run_action_block(:destroy)
-			resource.destroy
-			unless resource.errors.any?
-				respond_with(resource) do |format|
-					format.html { redirect_to :index, :notice => railgun_resource.name.downcase+" deleted successfully" }
-					format.json { render :json => resource }
-				end
-			else
-				respond_with(resource) do |format|
-			    format.html { redirect_to :index, :notice => "Unable to delete "+railgun_resource.name.downcase }
-			    format.json { render :json => resource.errors, :status => :unprocessable_entity }
-			  end
+		def destroy(options={}, &block)
+			update_action_block(:destroy, options, &block)
+			super(options) do |success, failure|
+				run_action_block(:destroy, success, failure)
+				success.html { redirect_to :action => :index }
+				success.json { render :json => resource }
 			end
 		end
 		alias_method :destroy!, :destroy
@@ -112,19 +126,36 @@ module Railgun
 			end
 		end
 		
+		def self.load_railgun_resource
+			self.railgun_resource ||= Railgun.application.find_or_create_resource(controller_name.classify.constantize)
+		end
+		
+		def self.member_action action, options
+			railgun_resource.dsl.member_action action, options
+		end
+		
+		def self.override_resource_class_methods!
+      self.class_eval do
+        def self.resource_class=(klass); end
+
+        def self.resource_class
+          @railgun_resource ? @railgun_resource.resource_class : nil
+        end
+
+        def resource_class
+          self.class.resource_class
+        end
+      end
+    end
+		
 protected		
 		
 		def resource
-			@resource ||= beginning_of_association_chain.find(params[:id]) if params[:id].present?
+			get_resource_ivar || set_resource_ivar(scoped_chain.send(method_for_find, params[:id]))
 		end
 		
 		def collection
-			if params[:action] == "index" || params[:action] == "batch_action"
-				@collection ||= end_of_association_chain
-				@collection
-			else
-				nil
-			end
+			get_collection_ivar || set_collection_ivar(scoped_chain.respond_to?(:scoped) ? scoped_chain.scoped : scoped_chain.all)
 		end
 		
 		def columns
@@ -139,21 +170,15 @@ protected
 			@editable_columns ||= railgun_resource.editable_columns
 		end
 		
-		def railgun_resource 
-			@railgun_resource ||= Railgun.find_resource_from_controller_name(railgun_controller)
-		end
-		
-		def resource_class
-			@resource_class ||= railgun_resource.resource_class
-		end
-		
-		# The end of our association chain, after all relationships have been applied
-		# This can be used to override the collection method
-		def end_of_association_chain
-			scope = beginning_of_association_chain
+		def scoped_chain
+			scope = inherited_chain
 			scope = scope.page(params[:page]).per(params[:per]) # Apply Kaminari pagination
 			scope = apply_scopes(scope) # Apply has_scope scopes
 			scope
+		end
+		
+		def inherited_chain
+			end_of_association_chain
 		end
 		
 		# Returns the current scope key, or default scope key
@@ -166,11 +191,6 @@ protected
 			railgun_resource.default_scope.try(:key)
 		end
 		
-		# The beginning of our association chain, before all relationships are applied
-		def beginning_of_association_chain
-			resource_class
-		end
-		
 private
 
 		def prepare_layout
@@ -181,9 +201,19 @@ private
 			Railgun.interface.add_crumb(:title => railgun_resource.name.pluralize, :path => [railgun_resource.resource_class])
 		end
 		
-		def run_action_block(action)
+		def run_action_block(action, success, failure=false)
 			action = railgun_resource.find_action(action)
-			instance_eval &action.block if action.block
+			if action.block && !failure
+				format = success unless failure
+				action.block.yield(format)
+			elsif action.block
+				action.block.yield(success, failure)
+			end
+		end
+		
+		def update_action_block(action, options, &block)
+			action = railgun_resource.find_action(action)
+			action.update(options, &block)
 		end
 		
 		def run_batch_action_block(batch_action, selection)

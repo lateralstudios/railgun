@@ -96,7 +96,7 @@
 			<!-- start: Content -->
 			
 			<div>
-				<%= render :partial => "breadcrumbs" %>
+				<%= render "railgun/shared/breadcrumbs" %>
 			</div>
 			
 			<% if flash[:alert].present? %>
@@ -115,9 +115,9 @@
        
        <%=
        if defined?(railgun_resource)
-       	render :partial => "resource"
+       	render :partial => "railgun/shared/resource"
        else
-       	render :partial => "page"
+       	render :partial => "railgun/shared/page"
        end
        
        %>

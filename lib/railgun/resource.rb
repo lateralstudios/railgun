@@ -12,6 +12,8 @@ module Railgun
 	
 		attr_accessor :name, :resource_class, :columns, :viewable_columns, :editable_columns, :name_column, :options, 
 								:sort_order, :path, :key, :new_actions, :member_actions, :collection_actions, :batch_actions, :scopes
+								
+		attr_writer :controller
 		
 		def initialize(resource, options = {})
 			# Customisable name
@@ -53,6 +55,10 @@ module Railgun
     	@controller ||= controller_name.constantize
     end
     
+    def controller_name
+    	self.class.string_to_controller_name(resource_class.name)
+    end
+    
     def dsl
     	@dsl ||= Railgun::DSL.new(self)
     end
@@ -83,10 +89,6 @@ module Railgun
     
     def to_path
     	self.class.string_to_path(resource_class.name)
-    end
-    
-    def controller_name
-    	self.class.string_to_controller_name(resource_class.name)
     end
     
     def self.string_to_sym(string)

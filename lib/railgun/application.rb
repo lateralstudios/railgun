@@ -22,8 +22,8 @@ module Railgun
 		
 		def register_resource(resource, options = {}, &block)
 			if ActiveRecord::Base.connection.tables.include?(resource.to_s.tableize)
-				register_resource_controller(resource)
 				railgun_resource = find_or_create_resource(resource)
+				register_resource_controller(railgun_resource)
 				railgun_resource.dsl.run_block(&block)
 			end
 		end
@@ -63,7 +63,8 @@ module Railgun
 private
 	
 		def register_resource_controller(resource)
-      eval "class #{Resource.string_to_controller_name(resource.name)} < Railgun::ResourcesController; end"
+      eval "class #{resource.controller_name} < Railgun::ResourcesController; end"
+      resource.controller.railgun_resource = resource
     end
 	
 	end

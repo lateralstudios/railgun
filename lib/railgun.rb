@@ -1,3 +1,4 @@
+require "inherited_resources"
 require "simple_form"
 require "has_scope"
 require "kaminari"
