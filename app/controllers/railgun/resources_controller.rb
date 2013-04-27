@@ -92,6 +92,7 @@ module Railgun
 			super(options) do |success, failure|
 				run_action_block(:create, success, failure)
 				success.html { redirect_to :action => :index }
+				success.json { render :json => resource }
 			end
 		end
 		alias_method :create!, :create
@@ -101,6 +102,7 @@ module Railgun
 			super(options) do |success, failure|
 				run_action_block(:update, success, failure)
 				success.html { redirect_to :action => :index }
+				success.json { render :json => resource }
 			end
 		end
 		alias_method :update!, :update
