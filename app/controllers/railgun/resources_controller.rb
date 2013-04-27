@@ -126,23 +126,29 @@ module Railgun
 			end
 		end
 		
-		def self.load_railgun_resource
-			self.railgun_resource ||= Railgun.application.find_or_create_resource(controller_name.classify.constantize)
-		end
+		class << self
 		
-		def self.member_action action, options
-			railgun_resource.dsl.member_action action, options
-		end
+			attr_accessor :railgun_resource
 		
-		def self.override_resource_class_methods!
-      self.class_eval do
-        def self.resource_class=(klass); end
-
-        def self.resource_class
-          @railgun_resource ? @railgun_resource.resource_class : nil
-        end
-      end
-    end
+			def load_railgun_resource
+				self.railgun_resource ||= Railgun.application.find_or_create_resource(controller_name.classify.constantize)
+			end
+			
+			def member_action action, options
+				railgun_resource.dsl.member_action action, options
+			end
+			
+			def override_resource_class_methods!
+	      self.class_eval do
+	        def self.resource_class=(klass); end
+	
+	        def self.resource_class
+	          @railgun_resource ? @railgun_resource.resource_class : nil
+	        end
+	      end
+	    end
+	   
+	  end
 		
 protected		
 		
@@ -175,6 +181,11 @@ protected
       self.class.resource_class
     end
     helper_method :resource_class
+    
+    def railgun_resource
+      self.class.railgun_resource
+    end
+    helper_method :railgun_resource
 		
 		def scoped_chain
 			scope = inherited_chain

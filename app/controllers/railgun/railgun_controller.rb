@@ -4,10 +4,6 @@ module Railgun
 		helper_method :title, :site_name, :railgun_controller, :interface
 		
 		layout 'railgun/application'
-		
-		class << self
-			attr_accessor :railgun_resource
-		end
   
   	def title
   		interface.title
@@ -24,11 +20,6 @@ module Railgun
   	def interface
   		Railgun.interface
   	end
-  	
-  	def railgun_resource
-      self.class.railgun_resource
-    end
-    helper_method :railgun_resource
   	
   	def railgun_template(template)
   		"railgun/"+template
