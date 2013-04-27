@@ -2,8 +2,6 @@ module Railgun
 	class ResourcesController < RailgunController
 	
 		helper 'railgun/resource'
-	
-		helper_method :railgun_resource, :resource_class, :collection, :resource, :viewable_columns, :editable_columns, :columns
 		
 		before_filter :prepare_layout
 		
@@ -141,10 +139,6 @@ module Railgun
         def self.resource_class
           @railgun_resource ? @railgun_resource.resource_class : nil
         end
-
-        def resource_class
-          self.class.resource_class
-        end
       end
     end
 		
@@ -153,22 +147,32 @@ protected
 		def resource
 			get_resource_ivar || set_resource_ivar(scoped_chain.send(method_for_find, params[:id]))
 		end
+		helper_method :resource
 		
 		def collection
 			get_collection_ivar || set_collection_ivar(scoped_chain.respond_to?(:scoped) ? scoped_chain.scoped : scoped_chain.all)
 		end
+		helper_method :collection
 		
 		def columns
 			@columns ||= railgun_resource.columns
 		end
+		helper_method :columns
 		
 		def viewable_columns
 			@viewable_columns ||= railgun_resource.viewable_columns
 		end
+		helper_method :viewable_columns
 		
 		def editable_columns
 			@editable_columns ||= railgun_resource.editable_columns
 		end
+		helper_method :editable_columns
+		
+		def resource_class
+      self.class.resource_class
+    end
+    helper_method :resource_class
 		
 		def scoped_chain
 			scope = inherited_chain
