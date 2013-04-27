@@ -20,25 +20,6 @@ module Railgun
 			scope.send(value)
 		end
 		
-		class << self
-      def railgun_resource=(resource)
-        @railgun_resource = resource
-
-        unless resource.nil?
-          defaults :resource_class => resource.resource_class#, :route_prefix => resource.route_prefix, :instance_name => resource.resource_name.singular
-        end
-      end
-
-      # Inherited Resources uses the inherited(base) hook method to
-      # add in the Base.resource_class class method. To override it, we
-      # need to install our resource_class method each time we're inherited from.
-      def inherited(base)
-        super(base)
-        base.load_railgun_resource
-        base.override_resource_class_methods!
-      end
-    end
-		
 		def index(options={}, &block)
 			update_action_block(:index, options, &block)
 			super(options) do |format|
@@ -128,6 +109,14 @@ module Railgun
 		class << self
 		
 			attr_accessor :railgun_resource
+			
+			def railgun_resource=(resource)
+        @railgun_resource = resource
+        unless resource.nil?
+          defaults :resource_class => resource.resource_class
+          	#, :route_prefix => resource.route_prefix, :instance_name => resource.resource_name.singular
+        end
+      end
 		
 			def load_railgun_resource
 				self.railgun_resource ||= Railgun.application.find_or_create_resource(controller_name.classify.constantize)
@@ -146,6 +135,12 @@ module Railgun
 	        end
 	      end
 	    end
+	    
+      def inherited(base)
+        super(base)
+        base.load_railgun_resource
+        base.override_resource_class_methods!
+      end
 	   
 	  end
 		
@@ -217,14 +212,9 @@ private
 			Railgun.interface.add_crumb(:title => railgun_resource.name.pluralize, :path => [railgun_resource.resource_class])
 		end
 		
-		def run_action_block(action, success, failure=false)
+		def run_action_block(action, *format)
 			action = railgun_resource.find_action(action)
-			if action.block && !failure
-				format = success unless failure
-				action.block.yield(format)
-			elsif action.block
-				action.block.yield(success, failure)
-			end
+			instance_exec *format, &action.block if action.block
 		end
 		
 		def update_action_block(action, options, &block)

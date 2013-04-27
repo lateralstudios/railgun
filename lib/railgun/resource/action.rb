@@ -19,7 +19,7 @@ module Railgun
 		
 		def update(options={}, &block)
 			self.options.merge!(options)
-			self.block = block
+			self.block = block if block
 		end
 		
 	end
