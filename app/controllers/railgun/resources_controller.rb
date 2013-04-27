@@ -1,13 +1,12 @@
 module Railgun
 	class ResourcesController < RailgunController
-	
-		helper 'railgun/resource'
 		
 		before_filter :prepare_layout
 		
 		respond_to :html, :js, :json, :xml
 		
 		layout 'railgun/application'
+		helper 'railgun/resource'
 		
 		has_scope :order, :default => "id_desc" do |controller, scope, value|
 			order_params = value.split("_")
