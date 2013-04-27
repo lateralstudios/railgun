@@ -17,7 +17,7 @@ module Railgun
 		end
 		
 		has_scope :scope do |controller, scope, value|
-			scope.send(value)
+			value == "all" ? scope : scope.send(value)
 		end
 		
 		def index(options={}, &block)
@@ -184,7 +184,6 @@ protected
 		def scoped_chain
 			scope = inherited_chain
 			scope = scope.page(params[:page]).per(params[:per]) # Apply Kaminari pagination
-			scope = apply_scopes(scope) # Apply has_scope scopes
 			scope
 		end
 		
