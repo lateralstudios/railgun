@@ -7,11 +7,11 @@ require "railgun/version"
 Gem::Specification.new do |s|
   s.name        = "railgun"
   s.version     = Railgun::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Railgun."
-  s.description = "TODO: Description of Railgun."
+  s.authors     = ["Tom Beynon"]
+  s.email       = ["tom@lateralstudios.com"]
+  s.homepage    = "http://lateralstudios.com"
+  s.summary     = "Modular app platform"
+  s.description = "A modular, extendable platform for your apps resources"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
