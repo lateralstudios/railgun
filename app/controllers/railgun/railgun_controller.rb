@@ -4,6 +4,8 @@ module Railgun
 		helper_method :title, :site_name, :railgun_controller, :interface
 		
 		layout 'railgun/application'
+		
+		before_filter :validate_admin
   
   	def title
   		interface.title
@@ -27,6 +29,10 @@ module Railgun
   	
   	def render_railgun(template)
   		render template, :locals => Railgun.interface.locals
+  	end
+  	
+  	def validate_admin
+  		self.send(Railgun.application.config.authenticate_method)
   	end
   	
   end

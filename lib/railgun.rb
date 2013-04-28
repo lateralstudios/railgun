@@ -7,6 +7,7 @@ require "railgun/application"
 require "railgun/interface"
 require "railgun/configuration"
 require "railgun/resource"
+require "railgun/railgun_module"
 require "railgun/engine"
 
 ####
@@ -25,6 +26,17 @@ module Railgun
     
 	end
 	
+	def self.configure
+    application.configure
+    yield(application.config)
+    after_configure
+  end
+  
+  def self.after_configure
+  	application.prevent_rails_loading_railgun_paths
+  	application.load_railgun_paths
+  end
+	
 	def self.config
 		application.config
 	end
@@ -36,17 +48,6 @@ module Railgun
 	def self.resources
   	application.resources
   end
-
-	def self.configure
-    application.configure
-    yield(application.config)
-    after_configure
-  end
-  
-  def self.after_configure
-  	application.prevent_rails_loading_railgun_paths
-  	application.load_railgun_paths
-  end
   
   def self.register_resource(resource, options = {}, &block)
   	application.register_resource(resource, options, &block)
@@ -55,6 +56,14 @@ module Railgun
   def self.find_resource_from_controller_name(controller)
   	symbol = Railgun::Resource.string_to_sym(controller.singularize)
   	resource = application.find_resource(symbol)
+  end
+  
+  def self.modules
+  	application.modules
+  end
+  
+  def self.register_module(resource, options = {}, &block)
+  	application.register_module(resource, options, &block)
   end
   
   def self.mounted_at

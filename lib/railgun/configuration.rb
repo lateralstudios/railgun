@@ -9,7 +9,8 @@ module Railgun
 			:mounted_at => "/railgun",
 			:load_paths => [File.expand_path('app/railgun', Rails.root), File.expand_path('app/controllers/railgun', Rails.root)],
 			:register_stylesheets => [],
-			:register_javascripts => []
+			:register_javascripts => [],
+			:authenticate_method => :authenticate_admin!
 		}
 		
 		cattr_accessor :settings

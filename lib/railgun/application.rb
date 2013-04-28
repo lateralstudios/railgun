@@ -5,7 +5,7 @@
 module Railgun
 	class Application
 	
-		attr_accessor :config, :resources, :interface
+		attr_accessor :config, :resources, :interface, :modules
 	
 		@railgun_loaded = false
 		
@@ -16,6 +16,7 @@ module Railgun
 		
 		def configure
 			self.resources ||= {}
+			self.modules ||= {}
 			self.config ||= Configuration.new
 			self.interface ||= Interface.new(self)
 		end
@@ -26,6 +27,11 @@ module Railgun
 				register_resource_controller(railgun_resource)
 				railgun_resource.dsl.run_block(&block)
 			end
+		end
+		
+		def register_module(mod, options = {}, &block)
+			self.modules ||= {}
+			modules[mod.to_s.underscore.to_sym] = RailgunModule.new(mod)
 		end
 		
 		def find_resource(symbol)

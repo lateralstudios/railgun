@@ -25,5 +25,11 @@ Railgun::Engine.routes.draw do
       end
 		end
 	end
+	
+	Railgun.modules.each_pair do |key, railgun_module|
+		if railgun_module.module.installed?
+			mount railgun_module.module::Engine, :at => '/'
+		end
+	end
 
 end
