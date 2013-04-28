@@ -209,7 +209,6 @@ private
 			if railgun_resource.nil? 
 				raise "Not found" # Should be not_found
 			end
-			Railgun.interface.reset
 			Railgun.interface.add_crumb(:title => railgun_resource.name.pluralize, :path => [railgun_resource.resource_class])
 		end
 		

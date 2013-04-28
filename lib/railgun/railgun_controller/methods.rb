@@ -9,6 +9,7 @@ module Railgun
 				base.instance_eval do
 				
 					layout 'railgun/application'
+					before_filter :reset_interface
 					before_filter :validate_admin
 					helper_method :title, :site_name, :railgun_controller, :interface
 					
@@ -49,6 +50,10 @@ module Railgun
 		  	
 		  	def validate_admin
 		  		self.send(Railgun.application.config.authenticate_method)
+		  	end
+		  	
+		  	def reset_interface
+		  		interface.reset
 		  	end
 		  end
 		  
