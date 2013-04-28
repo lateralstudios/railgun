@@ -1,5 +1,7 @@
 module Railgun
 	class ResourcesController < RailgunController
+	
+		inherit_resources
 		
 		before_filter :prepare_layout
 		

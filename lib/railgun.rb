@@ -7,6 +7,8 @@ require "railgun/application"
 require "railgun/interface"
 require "railgun/configuration"
 require "railgun/resource"
+require "railgun/railgun_controller"
+require "railgun/railgun_controller/methods"
 require "railgun/railgun_module"
 require "railgun/engine"
 
@@ -58,6 +60,10 @@ module Railgun
   	resource = application.find_resource(symbol)
   end
   
+  def self.inherit_railgun(controller)
+  	controller.send :include, RailgunController::Methods
+  end
+  
   def self.modules
   	application.modules
   end
@@ -70,4 +76,13 @@ module Railgun
   	config.mounted_at
   end
 	
+end
+
+class ActionController::Base
+  # If you cannot inherit from InheritedResources::Base you can call
+  # inherit_resource in your controller to have all the required modules and
+  # funcionality included.
+  def self.inherit_railgun
+    Railgun.inherit_railgun(self)
+  end
 end
