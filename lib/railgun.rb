@@ -58,8 +58,9 @@ module Railgun
   	resource = application.find_resource(symbol)
   end
   
+  #TODO
   def self.inherit_railgun(controller)
-  	controller.send :include, RailgunController::Methods
+  	controller.send :include, RailgunController::Helpers
   end
   
   def self.modules

@@ -17,10 +17,6 @@ module Railgun
 				self.railgun_resource ||= Railgun.application.find_or_create_resource(controller_name.classify.constantize)
 			end
 			
-			def member_action action, options
-				railgun_resource.dsl.member_action action, options
-			end
-			
 			def override_resource_class_methods!
 	      self.class_eval do
 	      	# Unset inherited_resource's method
