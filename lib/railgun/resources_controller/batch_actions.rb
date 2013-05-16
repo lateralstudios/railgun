@@ -2,17 +2,6 @@ module Railgun
 	class ResourcesController < RailgunController
 		
 		module BatchActions
-		
-			def self.included(base)
-	    	base.extend(ClassMethods)
-				base.instance_eval do
-					
-				end
-	    end
-	  
-		  module ClassMethods
-		  	
-		  end
 		  
 			def batch_action
 				selection = params[:batch_select].map{|id| id.to_i }

@@ -4,7 +4,6 @@ module Railgun
 		module Interface
 		
 			def self.included(base)
-	    	base.extend(ClassMethods)
 				base.instance_eval do
 				
 					before_filter :prepare_layout
@@ -16,10 +15,6 @@ module Railgun
 					
 				end
 	    end
-	  
-		  module ClassMethods
-		  	
-		  end
 		  
 		protected
 		

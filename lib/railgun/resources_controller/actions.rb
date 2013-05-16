@@ -2,16 +2,6 @@ module Railgun
 	class ResourcesController < RailgunController
 		
 		module Actions
-			
-			def self.included(base)
-	    	base.extend(ClassMethods)
-				base.instance_eval do
-					
-				end
-	    end
-	  
-		  module ClassMethods
-		  end
 
 	  	def index(options={}, &block)
 				update_action_block(:index, options, &block)
