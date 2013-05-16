@@ -7,8 +7,6 @@ require "railgun/application"
 require "railgun/interface"
 require "railgun/configuration"
 require "railgun/resource"
-require "railgun/railgun_controller"
-require "railgun/railgun_controller/methods"
 require "railgun/railgun_module"
 require "railgun/engine"
 

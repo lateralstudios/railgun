@@ -1,9 +1,9 @@
-require "railgun/railgun_controller/methods"
+require "railgun/railgun_controller/helpers"
 
 module Railgun
 	class RailgunController < ::ActionController::Base
 		
-		include Methods
+		include Helpers
   	
   end
 end

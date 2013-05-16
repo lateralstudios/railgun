@@ -1,13 +1,12 @@
 module Railgun
 	class RailgunController < ::ActionController::Base
 		
-		module Methods
+		module Helpers
 			
 			def self.included(base)
 	    	base.extend(ClassMethods)
 	    	base.send :include, InstanceMethods
 				base.instance_eval do
-				
 					layout 'railgun/application'
 					before_filter :reset_interface
 					before_filter :validate_admin
