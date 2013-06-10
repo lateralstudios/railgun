@@ -1,8 +1,7 @@
 module Railgun
 	class ResourcesController < RailgunController
-		
 		module BatchActions
-		  
+		
 			def batch_action
 				selection = params[:batch_select].map{|id| id.to_i }
 				run_batch_action_block(params[:batch_method].to_sym, selection)
@@ -12,7 +11,6 @@ module Railgun
 				end
 			end
 			
-		end
-		
+		end				
 	end
 end

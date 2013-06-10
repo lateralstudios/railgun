@@ -25,7 +25,7 @@ module Railgun
 		
 		include Scopes
 		
-		include Dsl
+		extend Dsl
 		
 	end
 end

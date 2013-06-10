@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    railgun (0.0.5)
+    railgun (0.0.6)
       has_scope
       inherited_resources
       jquery-rails

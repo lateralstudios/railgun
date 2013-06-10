@@ -2,8 +2,8 @@ module Railgun
 	class ResourcesController < RailgunController
 		module Dsl
 	
-			def member_action action, options
-				railgun_resource.dsl.member_action action, options
+			def member_action action, *options, &block
+				railgun_resource.dsl.member_action action, *options, &block
 			end
 			
 		end

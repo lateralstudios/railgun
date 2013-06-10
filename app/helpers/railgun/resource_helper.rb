@@ -25,7 +25,7 @@ module Railgun
   						content_tag(:p, File.basename(value.path).ellipsisize(8,8))
   					end
   				end
-  			elsif value.path # See if we have a carrierwave path, extract the filename if so
+  			elsif value.respond_to?(:path) # See if we have a carrierwave path, extract the filename if so
   				value = File.basename(value.path).ellipsisize(8,8)
   			end
   		end
