@@ -42,6 +42,7 @@
 				<a class="brand" href="<%= root_path %>"> <img alt="Optimus Dashboard" src="/assets/railgun/optimus/logo20.png" /> <span>Optimus Dashboard</span></a>
 								
 				<!-- start: Header Menu -->
+				<% if false %>
 				<div class="btn-group pull-right" >
 					<a class="btn" href="#">
 						<i class="icon-wrench"></i><span class="hidden-phone hidden-tablet"> settings</span>
@@ -58,6 +59,16 @@
 					</ul>
 					<!-- end: User Dropdown -->
 				</div>
+				<% end %>
+				<% Railgun.interface.menu_groups.each do |menu_group| %>
+					<div class="btn-group pull-right" >
+					<% menu_group[:buttons].each do |button| %>
+						<%= link_to button[:path], button[:options].merge({:class => button[:class]}) do %>
+							<i class="icon-<%= button[:icon] %>"></i><span class="hidden-phone hidden-tablet"> <%= button[:title] %></span>
+						<% end %>
+					<% end %>
+					</div>
+				<% end %>
 				<!-- end: Header Menu -->
 				
 			</div>
@@ -88,7 +99,7 @@
 			<noscript>
 				<div class="alert alert-block span10">
 					<h4 class="alert-heading">Warning!</h4>
-					<p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use this site.</p>
+					<p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">javascript</a> enabled to use Railgun.</p>
 				</div>
 			</noscript>
 			

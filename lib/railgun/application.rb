@@ -21,17 +21,18 @@ module Railgun
 			self.interface ||= Interface.new(self)
 		end
 		
+		def register_module(mod, options = {}, &block)
+			self.modules ||= {}
+			modules[mod.to_s.underscore.to_sym] = RailgunModule.new(self, mod, options, &block)
+		end
+		
+		# Make this more like register_module
 		def register_resource(resource, options = {}, &block)
 			if ActiveRecord::Base.connection.tables.include?(resource.to_s.tableize)
 				railgun_resource = find_or_create_resource(resource)
-				register_resource_controller(railgun_resource)
+				register_resource_controller(railgun_resource) # resource should do this?
 				railgun_resource.dsl.run_block(&block)
 			end
-		end
-		
-		def register_module(mod, options = {}, &block)
-			self.modules ||= {}
-			modules[mod.to_s.underscore.to_sym] = RailgunModule.new(mod)
 		end
 		
 		def find_resource(symbol)

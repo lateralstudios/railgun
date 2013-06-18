@@ -1,4 +1,4 @@
-require "railgun/resources_controller/interface"
+require "railgun/resources_controller/base"
 require "railgun/resources_controller/actions"
 require "railgun/resources_controller/batch_actions"
 require "railgun/resources_controller/railgun_resource"
@@ -15,7 +15,7 @@ module Railgun
 		
 		extend RailgunResource
 		
-		include Interface
+		include Base
 		
 		include Actions
 		

@@ -1,5 +1,5 @@
 module Railgun
-	class DSL
+	class ResourceDSL
 	
 		def initialize(resource)
 			@resource = resource

@@ -1,7 +1,7 @@
 module Railgun
 	class Interface
 		
-		attr_accessor :title, :locals, :breadcrumbs, :action_button_groups
+		attr_accessor :title, :locals, :breadcrumbs, :action_button_groups, :menu_groups
 		
 		def initialize(application)
       @application = application
@@ -42,8 +42,8 @@ module Railgun
 		def clear_crumbs
     	self.breadcrumbs = []
     end
-		
-		# Action buttons.. should these be a seperate object?
+    
+    # Action buttons.. should these be a seperate object?
 		def add_action_button_group(key, position = action_button_groups.count)
 			self.action_button_groups ||= []
 			group = {
@@ -73,6 +73,39 @@ module Railgun
     
     def clear_interface_buttons
     	self.action_button_groups = []
+    end
+    
+    # Menu buttons.. should these be a seperate object?
+		def add_menu_group(key, position = menu_groups.count, options = {})
+			self.menu_groups ||= []
+			group = {
+				:key => key,
+				:buttons => []
+			}
+			self.menu_groups.insert(position, group)
+			group
+		end
+		
+		def find_menu_group(key)
+			menu_groups.find{|g| g[:key] == key }
+		end
+		
+		def add_menu_button(group_key, title, path, *args)
+			options = args.extract_options!
+			group = find_menu_group(group_key) || add_menu_group(group_key)
+			position = options.delete(:position) || group[:buttons].count
+			group[:buttons].insert(position, {
+				:title => title,
+				:path => path,
+				:icon => options.delete(:icon) || "wrench",
+				:class => (options[:class].present? ? "btn #{options.delete(:class)}" : "btn"),
+				:options => options
+			})
+		end
+    
+    def clear_interface_buttons
+    	self.action_button_groups = []
+    	self.menu_groups = []
     end
 		
 	end

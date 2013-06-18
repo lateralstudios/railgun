@@ -1,7 +1,7 @@
 module Railgun
 	class ResourcesController < RailgunController
 		
-		module Interface
+		module Base
 		
 			def self.included(base)
 				base.instance_eval do

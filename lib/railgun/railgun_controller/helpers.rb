@@ -8,10 +8,9 @@ module Railgun
 	    	base.send :include, InstanceMethods
 				base.instance_eval do
 					layout 'railgun/application'
-					before_filter :reset_interface
 					before_filter :validate_admin
+					before_filter :prepare
 					helper_method :title, :site_name, :railgun_controller, :interface
-					
 				end
 	    end
 	  
@@ -45,6 +44,10 @@ module Railgun
 		  	
 		  	def render_railgun(template)
 		  		render template, :locals => Railgun.interface.locals
+		  	end
+		  	
+		  	def prepare
+		  		reset_interface
 		  	end
 		  	
 		  	def validate_admin

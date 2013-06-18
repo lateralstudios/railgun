@@ -1,4 +1,4 @@
-require "railgun/dsl"
+require "railgun/resource_dsl"
 require "railgun/resource/action"
 require "railgun/resource/batch_action"
 require "railgun/resource/scope"
@@ -60,7 +60,7 @@ module Railgun
     end
     
     def dsl
-    	@dsl ||= Railgun::DSL.new(self)
+    	@dsl ||= Railgun::ResourceDSL.new(self)
     end
     
     def actions
