@@ -9,6 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
+ *= require railgun/datepicker
  *= require railgun/optimus/bootstrap
  *= require railgun/optimus/bootstrap-responsive.min
  *= require railgun/optimus/style

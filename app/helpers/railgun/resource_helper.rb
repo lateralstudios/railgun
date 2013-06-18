@@ -39,6 +39,10 @@ module Railgun
   	
   	def short_format_datetime_column(resource, column)
   		value = resource.try(column.name.to_sym)
+  		pretty_datetime(value)
+  	end
+  	
+  	def pretty_datetime(value)
   		value.strftime("%d/%m/%y %H:%M:%S")
   	end
   	
