@@ -4,7 +4,7 @@
 		<div class="input-append date datetimepicker">
 		<%= form.input_field column.name, :as => :string, 
 																:class => "", :data => {:format => "dd/MM/yyyy hh:mm:ss"}, 
-																:value => resource.send(column.name).strftime("%d/%m/%Y %H:%M:%S") %>
+																:value => resource.send(column.name).try(:strftime, "%d/%m/%Y %H:%M:%S") %>
 	    <span class="add-on">
 	      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
 	      </i>
