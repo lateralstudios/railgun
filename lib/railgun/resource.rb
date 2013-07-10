@@ -21,10 +21,12 @@ module Railgun
       # The actual class
       self.resource_class = resource
       # Process the columns
-      self.columns = resource_class.columns
-      self.viewable_columns = columns.select{|c| true }
-      self.editable_columns = columns.select{|c| !c.primary && !%w(created_at updated_at).include?(c.name) }
-      self.name_column = find_name_column
+      if ActiveRecord::Base.connection.table_exists? resource_class.table_name
+        self.columns = resource_class.columns
+        self.viewable_columns = columns.select{|c| true }
+        self.editable_columns = columns.select{|c| !c.primary && !%w(created_at updated_at).include?(c.name) }
+        self.name_column = find_name_column
+      end
       # Filter out the user options
       self.options = default_options.merge(options)
       # A few helper methods
