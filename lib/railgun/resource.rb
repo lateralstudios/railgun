@@ -117,7 +117,7 @@ protected
         #  else
         #    puts "#{column} is not an assocation / relation."
         #  end
-        end
+        #end
       end
     end
 
