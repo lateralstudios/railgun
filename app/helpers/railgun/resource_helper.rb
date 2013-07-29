@@ -16,20 +16,25 @@ module Railgun
   	end
   	
   	def short_format_string_column(resource, column)
-  		value = resource.try(column.name.to_sym)
-  		unless value.blank?
-  			if defined?(value.thumb)
+  		method = column.name.to_sym
+  		if resource.respond_to?(method)
+	  		resource_method = resource.method(method)
+  			if resource_method.call.respond_to?(:thumb)
   				value = content_tag :div, :class => "string-image-content" do
-  					link_to value.url, :target => "_blank" do
-  						image_tag(value.thumb.url) + 
-  						content_tag(:p, File.basename(value.path).ellipsisize(8,8))
+  					link_to resource_method.call.url, :target => "_blank" do
+  						image_tag(resource_method.call.thumb.url) + 
+  						content_tag(:p, File.basename(resource_method.call.path).ellipsisize(8,8))
   					end
   				end
-  			elsif value.respond_to?(:path) # See if we have a carrierwave path, extract the filename if so
-  				value = File.basename(value.path).ellipsisize(8,8)
+  			elsif resource_method.call.respond_to?(:path) # See if we have a carrierwave path, extract the filename if so
+  				value = File.basename(resource_method.call.path).ellipsisize(8,8)
+  			else
+  				value = resource_method.call
   			end
+  			value.html_safe
+  		else
+  			value
   		end
-  		value.html_safe
   	end
   	
   	def short_format_text_column(resource, column)
