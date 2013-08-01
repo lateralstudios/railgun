@@ -5,7 +5,7 @@
 module Railgun
 	class Application
 	
-		attr_accessor :config, :resources, :interface, :modules
+		attr_accessor :config, :resources, :interface
 	
 		@railgun_loaded = false
 		
@@ -16,14 +16,8 @@ module Railgun
 		
 		def configure
 			self.resources ||= {}
-			self.modules ||= {}
 			self.config ||= Configuration.new
 			self.interface ||= Interface.new(self)
-		end
-		
-		def register_module(mod, options = {}, &block)
-			self.modules ||= {}
-			modules[mod.to_s.underscore.to_sym] = RailgunModule.new(self, mod, options, &block)
 		end
 		
 		# Make this more like register_module

@@ -7,7 +7,6 @@ require "railgun/application"
 require "railgun/interface"
 require "railgun/configuration"
 require "railgun/resource"
-require "railgun/railgun_module"
 require "railgun/engine"
 
 ####
@@ -61,14 +60,6 @@ module Railgun
   #TODO
   def self.inherit_railgun(controller)
   	controller.send :include, RailgunController::Helpers
-  end
-  
-  def self.modules
-  	application.modules
-  end
-  
-  def self.register_module(resource, options = {}, &block)
-  	application.register_module(resource, options, &block)
   end
   
   def self.mounted_at
