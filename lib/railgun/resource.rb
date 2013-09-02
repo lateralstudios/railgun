@@ -16,7 +16,7 @@ module Railgun
 		
 		def initialize(resource, options = {})
 			# Customisable name
-      self.name = "#{resource.name}"
+      self.name = "#{resource.name.titleize}"
       # The actual class
       self.resource_class = resource
       process_columns
