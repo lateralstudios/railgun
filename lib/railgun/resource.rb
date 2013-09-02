@@ -1,4 +1,3 @@
-require "railgun/resource_dsl"
 require "railgun/resource/action"
 require "railgun/resource/batch_action"
 require "railgun/resource/scope"
@@ -31,13 +30,11 @@ module Railgun
       self.new_actions = []
       self.member_actions = []
       self.collection_actions = []
-      self.add_default_actions
       # Build the batch actions
       self.batch_actions = []
-      self.add_default_batch_actions
+      #self.add_default_batch_actions
       # Build the scopes
       self.scopes = []
-      self.add_default_scopes
     end
     
     def default_options
@@ -53,10 +50,6 @@ module Railgun
     
     def controller_name
     	self.class.string_to_controller_name(resource_class.name)
-    end
-    
-    def dsl
-    	@dsl ||= Railgun::ResourceDSL.new(self)
     end
     
     def actions
@@ -126,36 +119,6 @@ protected
     	return :name if resource_class.column_names.include?("name")
     	return :username if resource_class.column_names.include?("username")
     	return :id if resource_class.column_names.include?("id")
-    end
-    
-    def add_default_actions
-    	default_actions = [:new, :create, :show, :edit, :update, :destroy, :index]
-    	default_actions.each do |action|
-	    	case action
-	    	when :new
-	    		self.new_actions << Railgun::Action.new(action, :method => :get) if [:new].include?(action)
-	    		self.new_actions << Railgun::Action.new(action, :method => :post) if [:create].include?(action)
-	    	when :show, :edit, :update, :destroy
-	    		self.member_actions << Railgun::Action.new(action, :method => :get) if [:show, :edit].include?(action)
-	    		self.member_actions << Railgun::Action.new(action, :method => :put) if [:update].include?(action)
-	    		self.member_actions << Railgun::Action.new(action, :method => :delete) if [:destroy].include?(action)
-	    	when :index, :create
-	    		self.collection_actions << Railgun::Action.new(action, :method => :get) if [:index, :new].include?(action)
-	    		self.collection_actions << Railgun::Action.new(action, :method => :post) if [:create].include?(action)
-	    	end
-	    end
-    end
-    
-    def add_default_batch_actions
-    	dsl.batch_action :delete do |selection|
-    		resource_class.find(selection).each do |resource|
-    			resource.delete
-    		end
-    	end
-    end
-    
-    def add_default_scopes
-    	dsl.scope :all, :default => true
     end
     
 	end
