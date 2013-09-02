@@ -30,11 +30,10 @@ module Railgun
       self.new_actions = []
       self.member_actions = []
       self.collection_actions = []
-      # Build the batch actions
+
       self.batch_actions = []
-      #self.add_default_batch_actions
-      # Build the scopes
       self.scopes = []
+      self.add_defaults
     end
     
     def default_options
@@ -119,6 +118,11 @@ protected
     	return :name if resource_class.column_names.include?("name")
     	return :username if resource_class.column_names.include?("username")
     	return :id if resource_class.column_names.include?("id")
+    end
+    
+    def add_defaults
+    	self.batch_actions << Railgun::BatchAction.new(:batch_delete)
+    	self.scopes << Railgun::Scope.new(:all, :default => true)
     end
     
 	end

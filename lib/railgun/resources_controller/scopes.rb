@@ -17,7 +17,7 @@ module Railgun
 						value == "all" ? scope : scope.send(value)
 					end	
 					
-					scope :all, :default => true
+					#scope :all, :default => true
 				end
 	    end			
 		

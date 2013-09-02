@@ -2,12 +2,6 @@ module Railgun
 	class ResourcesController < RailgunController
 		module BatchActions
 		
-			def self.included(base)
-				base.instance_eval do
-					batch_action :batch_delete
-				end
-			end
-		
 			def batch_action
 				send(params[:batch_method].to_sym)
 			end
