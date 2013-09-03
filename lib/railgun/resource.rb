@@ -96,20 +96,23 @@ protected
     def process_columns
       if ActiveRecord::Base.connection.table_exists? resource_class.table_name
         self.columns = resource_class.columns
-        self.viewable_columns = columns.select{|c| true } # This should only get attr_accessible columns
+        
+        # Find the associations
+        associations = []
+        all_associations = resource_class.reflect_on_all_associations
+        belongs_to = all_associations.select { |a| a.macro == :belongs_to }
+        association_foreign_keys = belongs_to.map(&:foreign_key)
+        columns.each do |column|
+          if association_foreign_keys.include?(column.name)
+            associations << column
+          end
+        end
+        
+        # TODO: This should only get attr_accessible columns
+        # TODO: Disabled viewing relationship columns for now.. 
+        self.viewable_columns = columns.select{|c| !c.primary && !associations.include?(c) } 
         self.editable_columns = columns.select{|c| !c.primary && !%w(created_at updated_at).include?(c.name) }
         self.name_column = find_name_column
-        # Find the associations
-        #associations = resource_class.reflect_on_all_associations
-        #associations = associations.select { |a| a.macro == :belongs_to }
-        #association_foreign_keys = associations.map(&:foreign_key)
-        #User.column_names.each do |column|
-        #  if association_foreign_keys.include?(column)
-        #    puts "#{column} is an association / relation."
-        #  else
-        #    puts "#{column} is not an assocation / relation."
-        #  end
-        #end
       end
     end
 
