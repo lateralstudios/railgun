@@ -20,15 +20,6 @@ module Railgun
 			self.interface ||= Interface.new(self)
 		end
 		
-		# Make this more like register_module
-		def register_resource(resource, options = {}, &block)
-			if ActiveRecord::Base.connection.tables.include?(resource.to_s.tableize)
-				railgun_resource = find_or_create_resource(resource)
-				register_resource_controller(railgun_resource) # resource should do this?
-				railgun_resource.dsl.run_block(&block)
-			end
-		end
-		
 		def find_resource(symbol)
 			resources[symbol] || nil
 		end
@@ -42,31 +33,24 @@ module Railgun
 			end
 			resources[name]
 		end
-	
+		
 		def load_railgun_paths
 			return false if @railgun_loaded
-	  	files_in_load_path.each{|file| load file }
-	  	@railgun_loaded = true
-	  end
-	  
-	  def files_in_load_path
-	    config.load_paths.flatten.compact.uniq.collect{|path| Dir["#{path}/**/*.rb"] }.flatten
-	  end
-	  
-	  def prevent_rails_loading_railgun_paths
-		  ActiveSupport::Dependencies.autoload_paths.reject!{|path| config.load_paths.include?(path) }
-		  # Don't eagerload our configs, we'll deal with them ourselves
-		  Rails.application.config.eager_load_paths = Rails.application.config.eager_load_paths.reject do |path|
-		    config.load_paths.include?(path)
+			files_in_load_path.each{|file| load file }
+			@railgun_loaded = true
+		end
+		
+		def files_in_load_path
+			config.load_paths.flatten.compact.uniq.collect{|path| Dir["#{path}/**/*.rb"] }.flatten
+		end
+		
+		def prevent_rails_loading_railgun_paths
+			ActiveSupport::Dependencies.autoload_paths.reject!{|path| config.load_paths.include?(path) }
+			# Don't eagerload our configs, we'll deal with them ourselves
+			Rails.application.config.eager_load_paths = Rails.application.config.eager_load_paths.reject do |path|
+		  	config.load_paths.include?(path)
 		  end
 		end
-
-private
-	
-		def register_resource_controller(resource)
-      eval "class #{resource.controller_name} < Railgun::ResourcesController; end"
-      resource.controller.railgun_resource = resource
-    end
 	
 	end
 end

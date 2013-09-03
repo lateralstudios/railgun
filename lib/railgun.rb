@@ -48,10 +48,6 @@ module Railgun
   	application.resources
   end
   
-  def self.register_resource(resource, options = {}, &block)
-  	application.register_resource(resource, options, &block)
-  end
-  
   def self.find_resource_from_controller_name(controller)
   	symbol = Railgun::Resource.string_to_sym(controller.singularize)
   	resource = application.find_resource(symbol)
