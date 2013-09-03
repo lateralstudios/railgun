@@ -3,9 +3,10 @@ module Railgun
 		module BatchActions
 		
 			def batch_action
-				selection = (params[:batch_select] || []).map{|id| id.to_i }
+				ids = (params[:batch_select] || []).map{|id| id.to_i }
+				selection = resource_class.find_by_id(ids)
 				send params[:batch_method].to_sym, selection
-				respond_with(collection) do |format|
+				respond_with(selection) do |format|
 					flash[:notice] = selection.count.to_s+" "+railgun_resource.name.downcase.pluralize+" affected"
 					format.html { redirect_to :action => :index}
 				end
