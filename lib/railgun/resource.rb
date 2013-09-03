@@ -121,7 +121,7 @@ protected
     end
     
     def add_defaults
-    	self.batch_actions << Railgun::BatchAction.new(:batch_delete)
+    	self.batch_actions << Railgun::BatchAction.new(:batch_delete, :label => "Delete")
     	self.scopes << Railgun::Scope.new(:all, :default => true)
     end
     

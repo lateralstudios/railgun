@@ -17,6 +17,10 @@ module Railgun
 			self.block = block
 		end
 		
+		def label
+			options[:label] || key.to_s.humanize
+		end
+		
 	end
 	
 end

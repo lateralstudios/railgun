@@ -1,4 +1,4 @@
-<%= render :partial => "filters" unless collection.nil? %>
+<%= render :partial => "filters" if params[:action] == "index" %>
 <div class="row-fluid sortable">		
 	<div class="box span12">
 		<div class="box-header" data-original-title>
