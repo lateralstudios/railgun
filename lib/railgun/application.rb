@@ -36,20 +36,12 @@ module Railgun
 		
 		def load_railgun_paths
 			return false if @railgun_loaded
-			files_in_load_path.each{|file| load file }
+			files_in_load_path.each{|file| Rails.application.config.cache_classes ? require(file) : load(file) }
 			@railgun_loaded = true
 		end
 		
 		def files_in_load_path
 			config.load_paths.flatten.compact.uniq.collect{|path| Dir["#{path}/**/*.rb"] }.flatten
-		end
-		
-		def prevent_rails_loading_railgun_paths
-			ActiveSupport::Dependencies.autoload_paths.reject!{|path| config.load_paths.include?(path) }
-			# Don't eagerload our configs, we'll deal with them ourselves
-			Rails.application.config.eager_load_paths = Rails.application.config.eager_load_paths.reject do |path|
-		  	config.load_paths.include?(path)
-		  end
 		end
 	
 	end
