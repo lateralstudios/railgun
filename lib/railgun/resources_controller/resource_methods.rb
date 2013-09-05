@@ -15,11 +15,11 @@ module Railgun
 	  protected
 	  
 		  def resource
-				get_resource_ivar || set_resource_ivar(scoped_chain.send(method_for_find, params[:id]))
+				get_resource_ivar || set_resource_ivar(resource_class.send(method_for_find, params[:id]))
 			end
 			
 			def collection
-				get_collection_ivar || set_collection_ivar(scoped_chain.respond_to?(:scoped) ? scoped_chain.scoped : scoped_chain.all)
+				get_collection_ivar || set_collection_ivar(railgun_chain.respond_to?(:scoped) ? railgun_chain.scoped : railgun_chain.all)
 			end
 	  
 			def resource_class
@@ -30,9 +30,9 @@ module Railgun
 	      self.class.railgun_resource
 	    end
 			
-			def scoped_chain
+			def railgun_chain
 				scope = inherited_chain
-				scope = scope.page(params[:page]).per(params[:per]) # Apply Kaminari pagination
+				scope = scope.page(page).per(per_page) # Apply Kaminari pagination
 				scope
 			end
 			

@@ -12,6 +12,8 @@ module Railgun
 					helper_method :columns
 					helper_method :viewable_columns
 					helper_method :editable_columns
+					helper_method :per_page
+					helper_method :page
 					
 				end
 	    end
@@ -28,6 +30,14 @@ module Railgun
 			
 			def editable_columns
 				@editable_columns ||= railgun_resource.editable_columns
+			end
+			
+			def per_page
+				params[:per] || 25
+			end
+			
+			def page
+				(params[:page] || 1).to_i
 			end
 		  
 		private

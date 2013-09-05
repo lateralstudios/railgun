@@ -1,4 +1,8 @@
-<%= render "batch_actions" %>
+<div class="clearfix">
+	<%= render "batch_actions" %>
+
+	<p class="pull-right">Showing <%= collection.count * (page-1) + 1 %> to <%= collection.count * page %> of <%= collection.total_count %> items</p>
+</div>
 
 <%= form_tag [:batch_action, resource_class], :id => "batch_action" do %>
 <%= hidden_field_tag :batch_method %>
