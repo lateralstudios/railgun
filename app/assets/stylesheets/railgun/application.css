@@ -14,4 +14,16 @@
  *= require railgun/optimus/bootstrap-responsive.min
  *= require railgun/optimus/style
  *= require railgun/optimus/style-responsive
+ *= require railgun/optimus/jquery-ui-1.8.21.custom
+ *= require railgun/optimus/fullcalendar
+ *= require railgun/optimus/chosen
+ *= require railgun/optimus/uniform.default
+ *= require railgun/optimus/jquery.cleditor
+ *= require railgun/optimus/jquery.noty
+ *= require railgun/optimus/noty_theme_default
+ *= require railgun/optimus/elfinder.min
+ *= require railgun/optimus/elfinder.theme
+ *= require railgun/optimus/jquery.iphone.toggle
+ *= require railgun/optimus/uploadify
+ *= require railgun/optimus/jquery.gritter
  */
