@@ -34,10 +34,44 @@ module Railgun
 			resources[name]
 		end
 		
-		def load_railgun_paths
-			return false if @railgun_loaded
-			files_in_load_path.each{|file| Rails.application.config.cache_classes ? require(file) : load(file) }
-			@railgun_loaded = true
+		def load_railgun
+			unless @railgun_loaded
+        files_in_load_path.each{ |file| load file }
+        @railgun_loaded = true 
+      end
+		end
+		
+		def prepare_reloader
+			config.load_paths.each do |path|
+        Rails.application.config.watchable_dirs[path] = [:rb]
+      end
+      
+      Rails.application.config.eager_load_paths += config.load_paths
+      
+      railgun_app = self
+      
+      ActionDispatch::Reloader.to_prepare do
+        railgun_app.unload_railgun_paths
+        railgun_app.load_railgun
+	      Rails.application.reload_routes!
+      end
+		end
+		
+		def unload_railgun_paths
+			resources.each do |key, resource|
+        const_name = resource.controller_name.split('::').last
+        # Remove the const if its been defined
+        Railgun.send(:remove_const, const_name) if Railgun.const_defined?(const_name)
+      end
+      @resources = {}
+      @railgun_loaded = false
+		end
+		
+		def prevent_rails_loading_railgun
+			#ActiveSupport::Dependencies.autoload_paths.reject!{|path| config.load_paths.include?(path) }
+      #Rails.application.config.eager_load_paths = Rails.application.config.eager_load_paths.reject do |path|
+      #  config.load_paths.include?(path)
+      #end
 		end
 		
 		def files_in_load_path

@@ -7,7 +7,7 @@ module Railgun
     isolate_namespace Railgun
     engine_name 'railgun'
     
-    config.autoload_paths += %W(#{config.root}/lib)
+    config.before_eager_load { |app| app.reload_routes! }
     
   end
 end

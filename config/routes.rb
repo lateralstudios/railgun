@@ -1,5 +1,5 @@
 Railgun::Engine.routes.draw do
-
+	
 	root :to => 'dashboard#index'
 	
 	Railgun.resources.each_pair do |key, resource|

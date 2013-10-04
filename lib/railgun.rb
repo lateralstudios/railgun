@@ -32,7 +32,8 @@ module Railgun
   end
   
   def self.after_configure
-  	application.load_railgun_paths
+  	application.prevent_rails_loading_railgun
+  	application.prepare_reloader
   end
 	
 	def self.config
