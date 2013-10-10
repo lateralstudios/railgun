@@ -42,19 +42,19 @@ module Railgun
 		end
 		
 		def prepare_reloader
-			config.load_paths.each do |path|
-        Rails.application.config.watchable_dirs[path] = [:rb]
-      end
+			unless Rails.application.config.cache_classes
+				config.load_paths.each do |path|
+        				Rails.application.config.watchable_dirs[path] = [:rb]
+      			end
       
-      Rails.application.config.eager_load_paths += config.load_paths
+      			railgun_app = self
       
-      railgun_app = self
-      
-      ActionDispatch::Reloader.to_prepare do
-        railgun_app.unload_railgun_paths
-        railgun_app.load_railgun
-	      Rails.application.reload_routes!
-      end
+      			ActionDispatch::Reloader.to_prepare do
+					railgun_app.unload_railgun_paths
+					railgun_app.load_railgun
+	    				Rails.application.reload_routes!
+				end
+			end
 		end
 		
 		def unload_railgun_paths
@@ -69,9 +69,9 @@ module Railgun
 		
 		def prevent_rails_loading_railgun
 			#ActiveSupport::Dependencies.autoload_paths.reject!{|path| config.load_paths.include?(path) }
-      #Rails.application.config.eager_load_paths = Rails.application.config.eager_load_paths.reject do |path|
-      #  config.load_paths.include?(path)
-      #end
+			#Rails.application.config.eager_load_paths = Rails.application.config.eager_load_paths.reject do |path|
+        		#	config.load_paths.include?(path)
+      		#end
 		end
 		
 		def files_in_load_path
