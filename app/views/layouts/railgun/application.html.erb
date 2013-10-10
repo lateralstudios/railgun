@@ -60,7 +60,8 @@
 					<!-- end: User Dropdown -->
 				</div>
 				<% end %>
-				<% Railgun.interface.menu_groups.each do |menu_group| %>
+				<% 
+				menu_groups.each do |menu_group| %>
 					<div class="btn-group pull-right" >
 					<% menu_group[:buttons].each do |button| %>
 						<%= link_to button[:path], button[:options].merge({:class => button[:class]}) do %>
@@ -107,7 +108,7 @@
 			<!-- start: Content -->
 			
 			<div>
-				<%= render "railgun/shared/breadcrumbs" %>
+				<%= render "railgun/shared/breadcrumb_list" %>
 			</div>
 			
 			<% if flash[:alert].present? %>

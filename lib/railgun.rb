@@ -4,7 +4,6 @@ require "has_scope"
 require "kaminari"
 
 require "railgun/application"
-require "railgun/interface"
 require "railgun/configuration"
 require "railgun/resource"
 require "railgun/engine"
@@ -38,10 +37,6 @@ module Railgun
 	
 	def self.config
 		application.config
-	end
-	
-	def self.interface
-		application.interface
 	end
 	
 	def self.resources

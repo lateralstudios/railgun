@@ -5,7 +5,7 @@
 module Railgun
 	class Application
 	
-		attr_accessor :config, :resources, :interface
+		attr_accessor :config, :resources
 	
 		@railgun_loaded = false
 		
@@ -17,7 +17,6 @@ module Railgun
 		def configure
 			self.resources ||= {}
 			self.config ||= Configuration.new
-			self.interface ||= Interface.new(self)
 		end
 		
 		def find_resource(symbol)
