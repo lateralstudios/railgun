@@ -1,6 +1,4 @@
 module Railgun
-	class ResourcesController < RailgunController
-		
 		module Scopes
 		
 			def self.included(base)
@@ -30,7 +28,5 @@ module Railgun
 			def default_scope
 				railgun_resource.default_scope.try(:key)
 			end
-			
-		end
 	end
 end

@@ -1,5 +1,4 @@
 module Railgun
-	class ResourcesController < RailgunController
 		module BatchActions
 		
 			def batch_action
@@ -22,5 +21,4 @@ module Railgun
     	end
     
 		end				
-	end
 end

@@ -1,31 +1,28 @@
-require "railgun/resources_controller/railgun_resource"
-require "railgun/resources_controller/resource_methods"
-require "railgun/resources_controller/dsl"
-require "railgun/resources_controller/base"
-require "railgun/resources_controller/actions"
-require "railgun/resources_controller/batch_actions"
-require "railgun/resources_controller/scopes"
-
 module Railgun
 	class ResourcesController < RailgunController
+
+		def self.load_railgun(base)
+      base.class_eval do
+        inherit_resources
 	
-		inherit_resources
+				respond_to :html, :js, :json, :xml
 		
-		respond_to :html, :js, :json, :xml
-		
-		extend RailgunResource
-		
-		include ResourceMethods
-		
-		extend Dsl
-		
-		include Base
-		
-		include Actions
-		
-		include BatchActions
-		
-		include Scopes
-		
+				extend Railgun::RailgunResource
+				
+				include Railgun::ResourceMethods
+				
+				extend Railgun::Dsl
+				
+				include Railgun::Base
+				
+				include Railgun::Actions
+				
+				include Railgun::BatchActions
+				
+				include Railgun::Scopes
+      end
+    end
+
+    load_railgun(self)
 	end
 end

@@ -1,6 +1,4 @@
 module Railgun
-	class RailgunController < ::ActionController::Base
-		
 		module Helpers
 			
 			def self.included(base)
@@ -39,8 +37,6 @@ module Railgun
 		  	end
 		  
 		end
-		
-	end
 end
 
 # Add our ellipsisize method to String

@@ -13,6 +13,17 @@ require "railgun/engine"
 #### It acts as the interface, passing on the primary methods to the application
 ####
 module Railgun
+
+  autoload :Helpers, 'railgun/railgun_controller/helpers'
+  autoload :Interface, 'railgun/railgun_controller/interface'
+
+  autoload :RailgunResource, 'railgun/resources_controller/railgun_resource'
+  autoload :ResourceMethods, 'railgun/resources_controller/resource_methods'
+  autoload :Dsl, 'railgun/resources_controller/dsl'
+  autoload :Base, 'railgun/resources_controller/base'
+  autoload :Actions, 'railgun/resources_controller/actions'
+  autoload :BatchActions, 'railgun/resources_controller/batch_actions'
+  autoload :Scopes, 'railgun/resources_controller/scopes'
 	
 	class << self
     
@@ -48,11 +59,6 @@ module Railgun
   	resource = application.find_resource(symbol)
   end
   
-  #TODO
-  def self.inherit_railgun(controller)
-  	controller.send :include, RailgunController::Helpers
-  end
-  
   def self.mounted_at
   	config.mounted_at
   end
@@ -64,6 +70,10 @@ class ActionController::Base
   # inherit_resource in your controller to have all the required modules and
   # funcionality included.
   def self.inherit_railgun
-    Railgun.inherit_railgun(self)
+    Railgun::RailgunController.inherit_railgun(self)
+  end
+
+  def self.load_railgun
+    Railgun::ResourcesController.load_railgun(self)
   end
 end
