@@ -43,15 +43,15 @@ module Railgun
 		def prepare_reloader
 			unless Rails.application.config.cache_classes
 				config.load_paths.each do |path|
-        				Rails.application.config.watchable_dirs[path] = [:rb]
-      			end
+  				Rails.application.config.watchable_dirs[path] = [:rb]
+  			end
       
-      			railgun_app = self
-      
-      			ActionDispatch::Reloader.to_prepare do
-					railgun_app.unload_railgun_paths
-					railgun_app.load_railgun
-	    				Rails.application.reload_routes!
+  			railgun_app = self
+  
+  			ActionDispatch::Reloader.to_prepare do
+				  railgun_app.unload_railgun_paths
+				  railgun_app.load_railgun
+				  Rails.application.reload_routes!
 				end
 			end
 		end
