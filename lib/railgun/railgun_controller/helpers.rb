@@ -31,7 +31,7 @@ module Railgun
 			  	end
 			  	
 			  	def validate_admin
-			  		self.send(Railgun.application.config.authenticate_method)
+			  		self.send(Railgun.application.config.authenticate_method) if Railgun.application.config.authenticate_method
 			  	end
 		  	
 		  	end

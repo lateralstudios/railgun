@@ -3,6 +3,7 @@ module Railgun
 
 		def self.load_railgun(base)
       base.class_eval do
+        
         inherit_resources
 	
 				respond_to :html, :js, :json, :xml

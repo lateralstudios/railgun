@@ -66,9 +66,6 @@ module Railgun
 end
 
 class ActionController::Base
-  # If you cannot inherit from InheritedResources::Base you can call
-  # inherit_resource in your controller to have all the required modules and
-  # funcionality included.
   def self.inherit_railgun
     Railgun::RailgunController.inherit_railgun(self)
   end
