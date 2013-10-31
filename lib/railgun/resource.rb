@@ -1,4 +1,4 @@
-require "railgun/resource/action"
+require "railgun/resource/actions"
 require "railgun/resource/batch_action"
 require "railgun/resource/scope"
 
@@ -10,31 +10,32 @@ module Railgun
 	class Resource
 	
 		attr_accessor :name, :resource_class, :columns, :viewable_columns, :editable_columns, :name_column, :options, 
-								:sort_order, :path, :key, :new_actions, :member_actions, :collection_actions, :batch_actions, :scopes
+								:sort_order, :path, :key, :actions, :member_actions, :collection_actions, :batch_actions, :scopes
 								
 		attr_writer :controller
-		
-		def initialize(resource, options = {})
-			# Customisable name
-      self.name = "#{resource.name.titleize}"
-      # The actual class
-      self.resource_class = resource
-      process_columns
-      # Filter out the user options
-      self.options = default_options.merge(options)
-      # A few helper methods
-      self.sort_order = options[:sort_order]
-      self.path = to_path
-      self.key = to_sym
-      # Build the actions
-      self.new_actions = []
-      self.member_actions = []
-      self.collection_actions = []
 
-      self.batch_actions = []
-      self.scopes = []
-      self.add_defaults
+		module Base
+  		def initialize(resource, options = {})
+  			# Customisable name
+        self.name = "#{resource.name.titleize}"
+        # The actual class
+        self.resource_class = resource
+        process_columns
+        # Filter out the user options
+        self.options = default_options.merge(options)
+        # A few helper methods
+        self.sort_order = options[:sort_order]
+        self.path = to_path
+        self.key = to_sym
+
+        self.batch_actions = []
+        self.scopes = []
+        self.add_defaults
+      end
     end
+
+    include Base
+    include Actions
     
     def default_options
     	options = {
@@ -51,12 +52,8 @@ module Railgun
     	self.class.string_to_controller_name(resource_class.name)
     end
     
-    def actions
-    	actions = [new_actions, member_actions, collection_actions].flatten!
-    end
-    
     def find_action(action)
-    	actions.try(:find){|a| a.key == action.to_sym }
+    	[new_actions, member_actions, collection_actions].flatten!.try(:find){|a| a.key == action.to_sym }
     end
     
     def find_batch_action(batch_action)

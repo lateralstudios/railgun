@@ -4,6 +4,22 @@ module Railgun
 			def option key, value
 				railgun_resource.options[key] = value
 			end
+
+            #actions :except => [:new, :create]
+            #actions :index, :show, :edit, :update, :destroy
+            #actions :only => [:index, :show, :edit, :update, :destroy]    
+            def actions *args
+                options = args.extract_options!
+                if args.any?
+                    railgun_resource.actions = args
+                else
+                    if options.has_key?(:except)
+                        railgun_resource.actions.reject!{|a| options[:except].include? a }
+                    elsif options.has_key?(:only)
+                        railgun_resource.actions = options[:only]
+                    end
+                end
+            end
 	
 			def scope key, *options
     			args = options.extract_options!
