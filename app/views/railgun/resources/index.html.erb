@@ -45,12 +45,16 @@
 			<td>
 			<div class="btn-toolbar">
 				<div class="btn-group">
+				<% if railgun_resource.actions.include?(:show) %>
 					<a class="btn btn-small" href="<%= url_for([resource]) %>">
 						View
 					</a>
+				<% end %>
+				<% if railgun_resource.actions.include?(:edit) %>
 					<a class="btn btn-small" href="<%= url_for([:edit, resource]) %>">
 						Edit
 					</a>
+				<% end %>
 				</div>
 				<div class="btn-group">
 				<% if railgun_resource.actions.include?(:destroy) %>
