@@ -5,20 +5,26 @@ module Railgun
 				railgun_resource.options[key] = value
 			end
 
-            #actions :except => [:new, :create]
             #actions :index, :show, :edit, :update, :destroy
+            #actions :all, :except => [:new, :create]
             #actions :only => [:index, :show, :edit, :update, :destroy]    
             def actions *args
                 options = args.extract_options!
-                if args.any?
-                    railgun_resource.actions = args
+
+                if options.has_key?(:only)
+                    railgun_resource.actions = options[:only]
                 else
+                    if args.reject!{|a| a == :all}
+                        railgun_resource.actions = Railgun::Resource::DEFAULT_ACTIONS.clone
+                    elsif args.any?
+                        railgun_resource.actions = args
+                    end
+
                     if options.has_key?(:except)
                         railgun_resource.actions.reject!{|a| options[:except].include? a }
-                    elsif options.has_key?(:only)
-                        railgun_resource.actions = options[:only]
                     end
                 end
+                # Need to undef methods
             end
 	
 			def scope key, *options
