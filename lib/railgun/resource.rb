@@ -8,6 +8,8 @@ require "railgun/resource/scope"
 ####
 module Railgun
 	class Resource
+
+    DEFAULT_ACTIONS = [:index, :show, :new, :create, :edit, :update, :destroy]
 	
 		attr_accessor :name, :resource_class, :columns, :viewable_columns, :editable_columns, :name_column, :options, 
 								:sort_order, :path, :key, :actions, :member_actions, :collection_actions, :batch_actions, :scopes
