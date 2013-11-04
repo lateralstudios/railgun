@@ -7,7 +7,8 @@
 		</a>
 		<ul class="dropdown-menu">
 			<% railgun_resource.batch_actions.each do |batch_action| %>
-			<li><%= link_to batch_action.label, "#", :class => "batch-action", :data => {'batch-method' => batch_action.key} %></li>
+			<li><%= link_to batch_action.label, "#", :class => "batch-action", 
+							:data => {'batch-method' => batch_action.key} %></li>
 			<% end %>
 		</ul>
 	</div>
