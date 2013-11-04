@@ -1,8 +1,18 @@
 module Railgun
 	class Resource
-		module BatchAction
+		module BatchActions
 			
+			def initialize(*args)
+        super
+				prepare_batch_actions
+			end
 			
+			def prepare_batch_actions
+				@batch_actions = []
+				DEFAULT_BATCH_ACTIONS.each do |batch_action|
+					@batch_actions << BatchAction.new(batch_action)
+				end
+			end
 			
 		end
 	end

@@ -8,7 +8,7 @@ module Railgun
 			end
 			
 			def prepare_actions
-				@actions ||= DEFAULT_ACTIONS
+				@actions = DEFAULT_ACTIONS
 				@member_actions, @collection_actions = [], []
 			end
 			

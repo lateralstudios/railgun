@@ -12,7 +12,7 @@ module Railgun
 				
 				include Railgun::ResourceMethods
 				
-				extend Railgun::Dsl
+				include Railgun::Dsl
 				
 				include Railgun::Base
 				

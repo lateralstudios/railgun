@@ -2,8 +2,8 @@ module Railgun
 		module Helpers
 			
 			def self.included(base)
-	    			base.extend(ClassMethods)
-	    			base.send :include, InstanceMethods
+  			base.extend(ClassMethods)
+  			base.send :include, InstanceMethods
 				base.instance_eval do
 					layout 'railgun/application'
 					before_filter :validate_admin

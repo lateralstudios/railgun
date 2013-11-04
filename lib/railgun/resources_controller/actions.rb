@@ -8,7 +8,6 @@ module Railgun
 					# TODO: should be elsewhere..
 					set_title(railgun_resource.name.pluralize)
 					add_action_button(:default, "Add New", [:new, railgun_resource.to_sym], :type => "info") if railgun_resource.actions.include?(:new)
-
 					instance_exec format, &block if block_given?
 					format.html { render_railgun railgun_template("resources/index") }
 				end

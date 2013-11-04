@@ -10,6 +10,7 @@ module Railgun
 	class Resource
 
     DEFAULT_ACTIONS = [:index, :show, :new, :create, :edit, :update, :destroy]
+    DEFAULT_BATCH_ACTIONS = [:batch_delete]
 	
 		attr_accessor :name, :resource_class, :columns, :viewable_columns, :editable_columns, :name_column, :options, 
 								:sort_order, :path, :key, :actions, :member_actions, :collection_actions, :batch_actions, :scopes
@@ -30,7 +31,6 @@ module Railgun
         self.path = to_path
         self.key = to_sym
 
-        self.batch_actions = []
         self.scopes = []
         self.add_defaults
       end
@@ -38,6 +38,7 @@ module Railgun
 
     include Base
     include Actions
+    include BatchActions
     
     def default_options
     	options = {
@@ -52,14 +53,6 @@ module Railgun
     
     def controller_name
     	self.class.string_to_controller_name(resource_class.name)
-    end
-    
-    def find_action(action)
-    	[new_actions, member_actions, collection_actions].flatten!.try(:find){|a| a.key == action.to_sym }
-    end
-    
-    def find_batch_action(batch_action)
-    	batch_actions.try(:find){|b| b.key == batch_action.to_sym} 
     end
     
     def default_scope
@@ -123,7 +116,6 @@ protected
     end
     
     def add_defaults
-    	self.batch_actions << Railgun::BatchAction.new(:batch_delete, :label => "Delete")
     	self.scopes << Railgun::Scope.new(:all, :default => true)
     end
     

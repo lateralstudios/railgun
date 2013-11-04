@@ -5,7 +5,7 @@
 			base.instance_eval do
 				helper_method :title, :breadcrumbs, :action_button_groups, :menu_groups
 			end
-    		end
+    end
 	
 		def railgun_template(template)
 			"railgun/"+template
