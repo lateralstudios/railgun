@@ -42,7 +42,7 @@ module Railgun
 			
 			def prepare_actions
 				@actions = []
-        DEFAULT_ACTIONS.clone.each do |key|
+        DEFAULT_ACTIONS.clone.each do |key, options|
           action key, :default
         end
 			end

@@ -22,8 +22,8 @@ module Railgun
 			
 			def prepare_batch_actions
 				@batch_actions = []
-				DEFAULT_BATCH_ACTIONS.each do |batch_action|
-					batch_action(batch_action)
+				DEFAULT_BATCH_ACTIONS.each do |key, options|
+					batch_action(key, options)
 				end
 			end
 			

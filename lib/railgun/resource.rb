@@ -1,7 +1,7 @@
 require "railgun/resource/actions"
-require "railgun/resource/batch_actions"
-require "railgun/resource/scope"
 require "railgun/resource/attributes"
+require "railgun/resource/batch_actions"
+require "railgun/resource/scopes"
 
 ####
 #### A Railgun resource
@@ -11,10 +11,11 @@ module Railgun
 	class Resource
 
     DEFAULT_ACTIONS = [:index, :show, :new, :create, :edit, :update, :destroy]
-    DEFAULT_BATCH_ACTIONS = [:batch_delete]
+    DEFAULT_BATCH_ACTIONS = [[:batch_delete, {:label => "Delete"}]]
+    DEFAULT_SCOPES = [[:all, {:default => true}]]
 	
 		attr_accessor :name, :resource_class, :options, 
-								:sort_order, :path, :key, :scopes
+								:sort_order, :path, :key
 								
 		attr_writer :controller
 
@@ -30,9 +31,6 @@ module Railgun
         self.sort_order = options[:sort_order]
         self.path = to_path
         self.key = to_sym
-
-        self.scopes = []
-        self.add_defaults
       end
     end
 
@@ -40,6 +38,7 @@ module Railgun
     include Actions
     include BatchActions
     include Attributes
+    include Scopes
     
     def default_options
     	options = {
@@ -54,10 +53,6 @@ module Railgun
     
     def controller_name
     	self.class.string_to_controller_name(resource_class.name)
-    end
-    
-    def default_scope
-    	scopes.try(:select){|a| a.default == true }.try(:last)
     end
     
     def to_sym
@@ -82,12 +77,6 @@ module Railgun
     
     def self.string_to_controller_name(string)
     	"Railgun::"+string.pluralize.camelize+"Controller"
-    end
-  
-protected
-    
-    def add_defaults
-    	self.scopes << Railgun::Scope.new(:all, :default => true)
     end
     
 	end

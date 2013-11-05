@@ -57,9 +57,8 @@ module Railgun
         railgun_resource.batch_action(key, options, &block)
       end
 
-      def scope key, *options
-        args = options.extract_options!
-        railgun_resource.scopes << Railgun::Scope.new(key, args)
+      def scope key, options = {}
+        railgun_resource.scope(key, options)
       end
 
       def attributes(*args)

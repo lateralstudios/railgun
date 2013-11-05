@@ -14,19 +14,17 @@ module Railgun
 					has_scope :scope do |controller, scope, value|
 						value == "all" ? scope : scope.send(value)
 					end	
+
+          helper_method :current_scope
 					
 					#scope :all, :default => true
 				end
 	    end			
 		
 			# Returns the current scope key, or default scope key
-			def current_scope_key
-				current_scope = params[:scope].try(:to_sym) || default_scope
+			def current_scope
+				params[:scope].try(:to_sym) || railgun_resource.default_scope.try(:key)
 			end
 			
-			# Find Railgun's default scope (if any)
-			def default_scope
-				railgun_resource.default_scope.try(:key)
-			end
 	end
 end

@@ -3,8 +3,6 @@ module Railgun
 
 			def index(options={}, &block)
 				super(options) do |format|
-					@current_scope = current_scope_key
-
 					# TODO: should be elsewhere..
 					set_title(railgun_resource.name.pluralize)
 					add_action_button(:default, "Add New", [:new, railgun_resource.to_sym], :type => "info") if railgun_resource.default_actions.find{|a| a.key == :new}
