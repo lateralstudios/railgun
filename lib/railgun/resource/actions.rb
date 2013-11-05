@@ -6,6 +6,8 @@ module Railgun
         super
 				prepare_actions
 			end
+
+    protected
 			
 			def prepare_actions
 				@actions = DEFAULT_ACTIONS

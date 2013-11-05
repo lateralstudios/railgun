@@ -56,6 +56,13 @@ module Railgun
         define_method(key, &block) if block_given?
         railgun_resource.batch_actions << Railgun::BatchAction.new(key, options, &block)
       end
+
+      def attributes(*args)
+        options = args.extract_options!
+        args.each do |attribute|
+          railgun_resource.attribute attribute, options
+        end
+      end
     end
   end
 end

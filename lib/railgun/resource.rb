@@ -1,6 +1,7 @@
 require "railgun/resource/actions"
 require "railgun/resource/batch_action"
 require "railgun/resource/scope"
+require "railgun/resource/attributes"
 
 ####
 #### A Railgun resource
@@ -12,7 +13,7 @@ module Railgun
     DEFAULT_ACTIONS = [:index, :show, :new, :create, :edit, :update, :destroy]
     DEFAULT_BATCH_ACTIONS = [:batch_delete]
 	
-		attr_accessor :name, :resource_class, :columns, :viewable_columns, :editable_columns, :name_column, :options, 
+		attr_accessor :name, :resource_class, :options, 
 								:sort_order, :path, :key, :actions, :member_actions, :collection_actions, :batch_actions, :scopes
 								
 		attr_writer :controller
@@ -23,7 +24,6 @@ module Railgun
         self.name = "#{resource.name.titleize}"
         # The actual class
         self.resource_class = resource
-        process_columns
         # Filter out the user options
         self.options = default_options.merge(options)
         # A few helper methods
@@ -39,6 +39,7 @@ module Railgun
     include Base
     include Actions
     include BatchActions
+    include Attributes
     
     def default_options
     	options = {
@@ -84,36 +85,6 @@ module Railgun
     end
   
 protected
-
-    def process_columns
-      if ActiveRecord::Base.connection.table_exists? resource_class.table_name
-        self.columns = resource_class.columns
-        
-        # Find the associations
-        associations = []
-        all_associations = resource_class.reflect_on_all_associations
-        belongs_to = all_associations.select { |a| a.macro == :belongs_to }
-        association_foreign_keys = belongs_to.map(&:foreign_key)
-        columns.each do |column|
-          if association_foreign_keys.include?(column.name)
-            associations << column
-          end
-        end
-        
-        # TODO: This should only get attr_accessible columns
-        # TODO: Disabled viewing relationship columns for now.. 
-        self.viewable_columns = columns.select{|c| !c.primary && !associations.include?(c) } 
-        self.editable_columns = columns.select{|c| !c.primary && !%w(created_at updated_at).include?(c.name) }
-        self.name_column = find_name_column
-      end
-    end
-
-		def find_name_column
-    	return :title if resource_class.column_names.include?("title")
-    	return :name if resource_class.column_names.include?("name")
-    	return :username if resource_class.column_names.include?("username")
-    	return :id if resource_class.column_names.include?("id")
-    end
     
     def add_defaults
     	self.scopes << Railgun::Scope.new(:all, :default => true)
