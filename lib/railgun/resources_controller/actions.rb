@@ -7,7 +7,7 @@ module Railgun
 
 					# TODO: should be elsewhere..
 					set_title(railgun_resource.name.pluralize)
-					add_action_button(:default, "Add New", [:new, railgun_resource.to_sym], :type => "info") if railgun_resource.actions.include?(:new)
+					add_action_button(:default, "Add New", [:new, railgun_resource.to_sym], :type => "info") if railgun_resource.default_actions.find{|a| a.key == :new}
 					instance_exec format, &block if block_given?
 					format.html { render_railgun railgun_template("resources/index") }
 				end
@@ -17,9 +17,9 @@ module Railgun
 				super(options) do |format|
 					add_crumb(:title => resource.send(railgun_resource.name_column), :path => [resource])
 					set_title("View "+railgun_resource.name)
-					add_action_button(:default, "Edit", [:edit, resource], :type => "info") if railgun_resource.actions.include?(:edit)
+					add_action_button(:default, "Edit", [:edit, resource], :type => "info") if railgun_resource.default_actions.find{|a| a.key == :edit}
 					add_action_button(:destroy, "Delete", resource, 
-						:type => "danger", :method => :delete, :confirm => "Are you sure you want to delete this record?")  if railgun_resource.actions.include?(:destroy)
+						:type => "danger", :method => :delete, :confirm => "Are you sure you want to delete this record?")  if railgun_resource.default_actions.find{|a| a.key == :destroy}
 					instance_exec format, &block if block_given?
 					format.html { render_railgun railgun_template("resources/show") }
 				end

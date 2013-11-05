@@ -1,5 +1,5 @@
 require "railgun/resource/actions"
-require "railgun/resource/batch_action"
+require "railgun/resource/batch_actions"
 require "railgun/resource/scope"
 require "railgun/resource/attributes"
 
@@ -14,7 +14,7 @@ module Railgun
     DEFAULT_BATCH_ACTIONS = [:batch_delete]
 	
 		attr_accessor :name, :resource_class, :options, 
-								:sort_order, :path, :key, :actions, :member_actions, :collection_actions, :batch_actions, :scopes
+								:sort_order, :path, :key, :scopes
 								
 		attr_writer :controller
 
