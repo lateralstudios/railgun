@@ -40,7 +40,7 @@
 		<tr role="<%= resource.id %>">
 			<td class="batch_select"><%= check_box_tag 'batch_select[]', resource.id, false, :class => "batch_select", :id => "" %></td>
 			<% viewable_columns.each do |column| %>
-			<td class="<%= "#{column.name.to_s} #{column.type.to_s}" %>"><%= short_format_column(resource, column) %></td> 
+			<td class="<%= "#{column.name.to_s} #{column.type.to_s}" %>"><%= short_format_attribute(resource, column) %></td> 
 			<% end %>
 			<td>
 			<div class="btn-toolbar">

@@ -1,22 +1,37 @@
 module Railgun
   module ResourceHelper
   	
-  	def short_format_column(resource, column)
-  		case column.type
+  	def short_format_attribute(resource, attribute)
+      association = railgun_resource.association_for(attribute)
+      if association
+        return short_format_association_attribute(resource, attribute, association)
+      end
+
+  		case attribute.type
   		when :string
-  			value = short_format_string_column(resource, column)
+  			value = short_format_string_attribute(resource, attribute)
   		when :text
-  			value = short_format_text_column(resource, column)
+  			value = short_format_text_attribute(resource, attribute)
   		when :datetime
-  			value = short_format_datetime_column(resource, column)
+  			value = short_format_datetime_attribute(resource, attribute)
   		else
-  			value = resource.try(column.name.to_sym)
+  			value = resource.try(attribute.name.to_sym)
   		end
   		value
   	end
+
+    def short_format_association_attribute(resource, attribute, association)
+      value = resource.send(attribute.key)
+      if value.present? && association.type == :belongs_to
+        # Need to use custom finder
+        parent = association.klass.find(resource.send(attribute.key))
+        name_column = Railgun::Resource::DEFAULT_NAME_COLUMNS.find{|col| parent.respond_to? col }
+        parent.send(name_column)
+      end
+    end
   	
-  	def short_format_string_column(resource, column)
-  		method = column.name.to_sym
+  	def short_format_string_attribute(resource, attribute)
+  		method = attribute.key
   		if resource.respond_to?(method)
 	  		resource_method = resource.method(method)
   			if resource_method.call.respond_to?(:thumb)
@@ -37,13 +52,13 @@ module Railgun
   		end
   	end
   	
-  	def short_format_text_column(resource, column)
-  		value = resource.try(column.name.to_sym)
+  	def short_format_text_attribute(resource, attribute)
+  		value = resource.try(attribute.key)
   		truncate(value, :length => 100, :separator => ' ')
   	end
   	
-  	def short_format_datetime_column(resource, column)
-  		value = resource.try(column.name.to_sym)
+  	def short_format_datetime_attribute(resource, attribute)
+  		value = resource.try(attribute.key)
   		pretty_datetime(value)
   	end
   	

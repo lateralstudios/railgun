@@ -26,6 +26,10 @@ module Railgun
         attributes.find_all{|a|a.editable}
       end
 
+      def name_column
+        @name_column ||= attributes.find{|a| DEFAULT_NAME_COLUMNS.include? a.key }.try(:key)
+      end
+
     protected
       
       def prepare_attributes
@@ -45,10 +49,6 @@ module Railgun
             attribute key, options
           end
         end
-      end
-
-      def name_column
-        @name_column ||= attributes.find{|a| DEFAULT_NAME_COLUMNS.include? a.key }
       end
       
     end
