@@ -2,7 +2,7 @@ module Railgun
   class Resource
     module Attributes
 
-      attr_accessor :attributes, :name_column
+      attr_accessor :attributes
 
       def initialize(*args)
         super
@@ -30,21 +30,13 @@ module Railgun
       
       def prepare_attributes
         @attributes = []
-        @name_column = nil
 
         if ActiveRecord::Base.connection.table_exists? resource_class.table_name
-          associations = resource_class.reflect_on_all_associations
           resource_class.columns.each do |column|
             key = column.name.to_sym
             options = {:column => column, :type => column.type}
 
-            association = associations.find{|a| a.association_foreign_key == column.name}
-            if association
-              options[:association] = association
-            end
-
-            # TODO: Disabled viewing relationship columns for now.. 
-            options[:viewable] = !column.primary && !association
+            options[:viewable] = !column.primary
             # TODO: This should only get attr_accessible / weak attrs
             options[:editable] = !column.primary && ![:created_at, :updated_at].include?(key)
 
@@ -52,16 +44,11 @@ module Railgun
 
             attribute key, options
           end
-          
-          @name_column = find_name_column
         end
       end
 
-      def find_name_column
-        return :title if resource_class.column_names.include?("title")
-        return :name if resource_class.column_names.include?("name")
-        return :username if resource_class.column_names.include?("username")
-        return :id if resource_class.column_names.include?("id")
+      def name_column
+        @name_column ||= attributes.find{|a| DEFAULT_NAME_COLUMNS.include? a.key }
       end
       
     end
@@ -72,13 +59,12 @@ module Railgun
     attr_accessor :key, :viewable, :editable, :type, :association, :column, :options
     
     # attribute :owner, {:viewable => true, :editable => false, 
-    #           :type => :integer, :association => AR_Association, :column => AR_Column
+    #           :type => :integer, :column => AR_Column
     def initialize(key, options={})
       @key = key.to_sym
       @viewable = true
       @editable = true
       @type = nil
-      @association = nil
       @column = nil
       @options = {}
 
@@ -98,7 +84,6 @@ module Railgun
       @viewable = options.delete(:viewable) if options.has_key?(:viewable)
       @editable = options.delete(:editable) if options.has_key?(:editable)
       @type = options.delete(:type).to_sym if options.has_key?(:type)
-      @association = options.delete(:association) if options.has_key?(:association)
       @column = options.delete(:column) if options.has_key?(:column)
       @options.merge!(options)
     end

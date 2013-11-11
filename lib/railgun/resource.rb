@@ -1,4 +1,5 @@
 require "railgun/resource/actions"
+require "railgun/resource/associations"
 require "railgun/resource/attributes"
 require "railgun/resource/batch_actions"
 require "railgun/resource/scopes"
@@ -13,6 +14,7 @@ module Railgun
     DEFAULT_ACTIONS = [:index, :show, :new, :create, :edit, :update, :destroy]
     DEFAULT_BATCH_ACTIONS = [[:batch_delete, {:label => "Delete"}]]
     DEFAULT_SCOPES = [[:all, {:default => true}]]
+    DEFAULT_NAME_COLUMNS = [:title, :name, :username, :id]
 	
 		attr_accessor :name, :resource_class, :options, 
 								:sort_order, :path, :key
@@ -37,6 +39,7 @@ module Railgun
     include Base
     include Actions
     include BatchActions
+    include Associations
     include Attributes
     include Scopes
     
