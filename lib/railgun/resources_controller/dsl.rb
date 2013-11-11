@@ -67,6 +67,11 @@ module Railgun
           railgun_resource.attribute attribute, options
         end
       end
+
+      def attribute(key, *args)
+        options = args.extract_options!
+        railgun_resource.attribute key, options
+      end
     end
   end
 end
