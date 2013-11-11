@@ -20,6 +20,15 @@ module Railgun
   		value
   	end
 
+    def attribute_field(resource, attribute, form)
+      association = railgun_resource.association_for(attribute)
+      if association
+        render :partial => "railgun/resources/fields/"+association.type.to_s, :locals => {:form => form, :column => attribute, :resource => resource, :association => association}
+      else
+        render :partial => "railgun/resources/fields/"+attribute.type.to_s, :locals => {:form => form, :column => attribute, :resource => resource}
+      end
+    end 
+
     def short_format_association_attribute(resource, attribute, association)
       value = resource.send(attribute.key)
       if value.present? && association.type == :belongs_to

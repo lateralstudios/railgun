@@ -72,6 +72,7 @@ module Railgun
     end
 
     def parse_options(options)
+      # TODO: optional collection and finder methods
       @options.merge!(options)
     end
     
