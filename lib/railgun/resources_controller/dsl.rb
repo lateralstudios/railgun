@@ -72,6 +72,8 @@ module Railgun
         options = args.extract_options!
         railgun_resource.attribute key, options
       end
+
+      # TODO: association :gallery, :scope => :all, :foreign_key => :gallery_id, :class_name => "gallery"
     end
   end
 end
