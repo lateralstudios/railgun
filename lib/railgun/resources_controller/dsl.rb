@@ -31,12 +31,13 @@ module Railgun
             keys.reject!{|a| except.include? a }
           end
 
-          unless keys.include?(:destroy)
-            railgun_resource.batch_actions.reject!{|b| b.key == :batch_delete }
+          keys.each do |key|
+            railgun_resource.actions.reject!{|a| !keys.include?(a.key) }
+            railgun_resource.action key, :default, options
           end
 
-          keys.each do |key|
-            railgun_resource.action key, :default, options
+          unless keys.include?(:destroy)
+            railgun_resource.batch_actions.reject!{|b| b.key == :batch_delete }
           end
         end
           # Need to undef methods
