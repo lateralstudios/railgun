@@ -1,3 +1,33 @@
-= Railgun
+# railgun
 
-This project rocks and uses MIT-LICENSE.
+## Set-up
+
+Add railgun to your Gemfile
+
+    gem 'railgun', :git => 'git@github.com:lateralstudios/railgun.git', :branch => :master
+
+Mount railgun in your `routes.rb`
+
+    mount Railgun::Engine, :at => '/railgun'
+
+All done, restart your server and browse to your mount location
+
+## Configuration
+
+Create an initializer to set the basic configuration at `config/initializers/railgun.rb`
+
+```
+Railgun.configure do |config|
+
+  config.site_name = "Site name"
+  config.mounted_at = "/railgun"
+
+  ## Set the method used to authenticate a user, or nil
+  #config.authenticate_method = :authenticate_admin!
+
+  ## Register any additional scripts to include
+  #config.register_stylesheets = %w(railgun)
+  #config.register_javascripts = %w(railgun)
+  
+end
+```
