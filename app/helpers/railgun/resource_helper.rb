@@ -43,6 +43,8 @@ module Railgun
   		method = attribute.key
   		if resource.respond_to?(method)
 	  		resource_method = resource.method(method)
+        value = resource_method.call
+        return nil if value.nil?
   			if resource_method.call.respond_to?(:thumb)
   				value = content_tag :div, :class => "string-image-content" do
   					link_to resource_method.call.url, :target => "_blank" do
@@ -53,11 +55,11 @@ module Railgun
   			elsif resource_method.call.respond_to?(:path) # See if we have a carrierwave path, extract the filename if so
   				value = File.basename(resource_method.call.path).ellipsisize(8,8)
   			else
-  				value = resource_method.call
+  				value
   			end
   			value.html_safe
   		else
-  			value
+  			nil
   		end
   	end
   	
@@ -72,7 +74,7 @@ module Railgun
   	end
   	
   	def pretty_datetime(value)
-  		value.strftime("%d/%m/%y %H:%M:%S")
+  		value.strftime("%d/%m/%y %H:%M:%S") unless value.nil?
   	end
   	
   end
