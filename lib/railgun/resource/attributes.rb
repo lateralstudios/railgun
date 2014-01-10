@@ -64,7 +64,7 @@ module Railgun
       @key = key.to_sym
       @viewable = true
       @editable = true
-      @type = "string"
+      @type = :string
       @column = nil
       @options = {}
 
