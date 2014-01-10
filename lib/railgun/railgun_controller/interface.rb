@@ -19,15 +19,15 @@
 			@title ||= ""
 		end
     
-    		def set_title(new_title)
-    			title = new_title
-	    end
-    
-    		def add_local(*args)
-    			options = args.extract_options!
-    			@locals ||= {}
-    			@locals.merge!(options)
-    		end
+		def set_title(new_title)
+			title = new_title
+    end
+  
+		def add_local(*args)
+			options = args.extract_options!
+			@locals ||= {}
+			@locals.merge!(options)
+		end
 
 		def breadcrumbs
 			@breadcrumbs ||= []
