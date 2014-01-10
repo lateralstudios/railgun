@@ -7,14 +7,6 @@
 			end
     end
 	
-		def railgun_template(template)
-			"railgun/"+template
-		end
-		  	
-		def render_railgun(template)
-			render template, :locals => @locals
-		end
-	
 		def title
 			@title ||= ""
 		end
@@ -22,12 +14,6 @@
 		def set_title(new_title)
 			title = new_title
     end
-  
-		def add_local(*args)
-			options = args.extract_options!
-			@locals ||= {}
-			@locals.merge!(options)
-		end
 
 		def breadcrumbs
 			@breadcrumbs ||= []
