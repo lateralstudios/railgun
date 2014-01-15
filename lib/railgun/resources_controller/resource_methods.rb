@@ -33,6 +33,7 @@ module Railgun
 			scope = scope.page(page).per(per_page) # Apply Kaminari pagination
 			scope
 		end
+    alias_method :end_of_railgun_chain, :railgun_chain
 		
 		def inherited_chain
 			end_of_association_chain
