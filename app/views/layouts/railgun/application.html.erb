@@ -127,14 +127,7 @@
 			</div>
 			<% end %>
        
-       <%=
-       if defined?(railgun_resource)
-       	render :partial => "railgun/shared/resource"
-       else
-       	render :partial => "railgun/shared/page"
-       end
-       
-       %>
+      <%= yield %>
        
 			</div><!--/#content.span10-->
 				</div><!--/fluid-row-->

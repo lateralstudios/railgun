@@ -1,13 +1,25 @@
-<%= simple_form_for resource, :html => {:class => "form-horizontal"} do |f| %>
-  <fieldset>
-	
-	<% editable_columns.each do |column| %>
-		<%= attribute_field(resource, column, f) %>
-	<% end %>
-	
-	<div class="form-actions">
-		<%= f.button :submit, :class => "btn btn-primary" %>
-		<%= link_to "Cancel", resource || [resource_class], :class => "btn" %>
-	</div>
-  </fieldset>
-<% end %>
+<div class="row-fluid sortable">    
+  <div class="box span12">
+    <div class="box-header" data-original-title>
+      <h2><i class="icon-<%= railgun_resource.options[:icon] %>"></i><span class="break"></span><%= title %></h2>
+      <%= render "action_buttons" %>
+    </div>
+    <div class="box-content">
+    
+      <%= simple_form_for resource, :html => {:class => "form-horizontal"} do |f| %>
+        <fieldset>
+      	
+      	<% editable_columns.each do |column| %>
+      		<%= attribute_field(resource, column, f) %>
+      	<% end %>
+      	
+      	<div class="form-actions">
+      		<%= f.button :submit, :class => "btn btn-primary" %>
+      		<%= link_to "Cancel", resource || [resource_class], :class => "btn" %>
+      	</div>
+        </fieldset>
+      <% end %>
+
+    </div>
+  </div>
+</div>
