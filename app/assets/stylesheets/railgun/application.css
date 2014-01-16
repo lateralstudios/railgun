@@ -27,3 +27,7 @@
  *= require railgun/optimus/uploadify
  *= require railgun/optimus/jquery.gritter
  */
+
+.modal > form{
+  margin-bottom:0;
+}
