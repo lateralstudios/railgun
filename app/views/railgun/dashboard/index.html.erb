@@ -1,5 +1,5 @@
 <div class="row-fluid">
-	<% Railgun.resources.each_pair do |key, resource| %>				
+	<% Railgun.viewable_resources.each_pair do |key, resource| %>				
 	<div class="box-small span2">
 		<a href="<%= url_for resource.resource_class %>" class="box-small-link" data-rel="tooltip" data-original-title="There are <%= resource.resource_class.all.count %> <%= resource.name.pluralize %>">
 			<div id="members-count"><%= resource.resource_class.all.count %></div>
