@@ -31,3 +31,8 @@
 .modal > form{
   margin-bottom:0;
 }
+
+.control-group .controls .hint{
+  display: block;
+  font-size:90%;
+}
