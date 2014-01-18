@@ -29,7 +29,7 @@ module Railgun
         if ActiveRecord::Base.connection.table_exists? resource_class.table_name
           reflections = resource_class.reflect_on_all_associations
           reflections.each do |reflection|
-            next if reflection.options[:polymorphic]
+            next if reflection.macro == :has_and_belongs_to_many || reflection.options[:polymorphic]
             key = reflection.name
             type = reflection.macro
             options = {
