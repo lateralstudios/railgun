@@ -53,6 +53,10 @@ module Railgun
 	def self.resources
   	application.resources
   end
+
+  def self.viewable_resources
+    application.viewable_resources
+  end
   
   def self.find_resource_from_controller_name(controller)
   	symbol = Railgun::Resource.string_to_sym(controller.singularize)

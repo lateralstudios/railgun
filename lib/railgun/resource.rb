@@ -57,6 +57,10 @@ module Railgun
     def controller_name
     	self.class.string_to_controller_name(resource_class.name)
     end
+
+    def viewable? 
+      actions.any?{|a| a.key == :index}
+    end
     
     def to_sym
     	self.class.string_to_sym(resource_class.name)

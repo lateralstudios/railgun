@@ -18,6 +18,10 @@ module Railgun
 			self.resources ||= {}
 			self.config ||= Configuration.new
 		end
+
+    def viewable_resources
+      resources.select{|key, r| r.viewable? }
+    end
 		
 		def find_resource(symbol)
 			resources[symbol] || nil
