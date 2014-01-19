@@ -1,0 +1,14 @@
+<div class="control-group">
+	<label for="testimonial_comment" class="text optional control-label"><%= column.name.humanize %></label>
+	<div class="controls">
+		<div class="input-append date datepicker">
+		<%= form.input_field column.name, :as => :string, 
+																:class => "", :data => {:format => "dd/MM/yyyy"}, 
+																:value => resource.send(column.name).try(:strftime, "%d/%m/%Y") %>
+	    <span class="add-on">
+	      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+	      </i>
+	    </span>
+	  </div>
+	</div>
+</div>
