@@ -1,5 +1,6 @@
+<% Railgun.viewable_resources.to_a.in_groups_of(5, false).each do |group| %>
 <div class="row-fluid">
-	<% Railgun.viewable_resources.each_pair do |key, resource| %>				
+	<% group.each do |key, resource| %>				
 	<div class="box-small span2">
 		<a href="<%= url_for resource.resource_class %>" class="box-small-link" data-rel="tooltip" data-original-title="There are <%= resource.resource_class.all.count %> <%= resource.name.pluralize %>">
 			<div id="members-count"><%= resource.resource_class.all.count %></div>
@@ -8,6 +9,7 @@
 	</div>
 	<% end %>
 </div>
+<% end %>
 
 <hr />
 
