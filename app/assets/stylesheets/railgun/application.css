@@ -36,3 +36,13 @@
   display: block;
   font-size:90%;
 }
+
+footer{
+  margin-bottom:20px;
+  overflow: hidden;
+}
+
+footer img.logo{
+  height:15px; 
+  margin-left:5px;
+}

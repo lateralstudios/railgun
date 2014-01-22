@@ -5,7 +5,7 @@
 module Railgun
 	class Configuration
 		@@defaults = {
-			:site_title => "Railgun",
+			:site_name => "Railgun",
 			:mounted_at => "/railgun",
 			:load_paths => [File.expand_path('app/railgun', Rails.root), File.expand_path('app/controllers/railgun', Rails.root)],
 			:register_stylesheets => [],
