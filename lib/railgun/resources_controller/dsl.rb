@@ -6,14 +6,21 @@ module Railgun
     end
 
     module ClassMethods
-      
+
       def option key, value
         railgun_resource.options[key] = value
       end
 
+      #TODO override resource_class
+      def model klass
+        # TODO Resource keys
+        Railgun.resources.delete(railgun_resource.name.demodulize.underscore.to_sym) if railgun_resource
+        self.railgun_resource = Railgun.application.find_or_create_resource(klass, self)
+      end
+
       #actions :index, :show, :edit, :update, :destroy
       #actions :all, :except => [:new, :create]
-      #actions :only => [:index, :show, :edit, :update, :destroy]    
+      #actions :only => [:index, :show, :edit, :update, :destroy]
       def actions *args
         options = args.extract_options!
         keys = []
@@ -42,7 +49,7 @@ module Railgun
         end
           # Need to undef methods
       end
-                 
+
       def member_action(key, options = {}, &block)
         define_method(key, &block) if block_given?
         railgun_resource.member_action(key, options, &block)
