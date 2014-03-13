@@ -1,16 +1,16 @@
  module Railgun
 	module Interface
-	
+
 		def self.included(base)
 			base.instance_eval do
 				helper_method :title, :breadcrumbs, :action_button_groups, :menu_groups
 			end
     end
-	
+
 		def title
 			@title ||= ""
 		end
-    
+
 		def set_title(new_title)
 			title = new_title
     end
@@ -18,7 +18,7 @@
 		def breadcrumbs
 			@breadcrumbs ||= []
 		end
-		
+
 		def add_crumb(*args)
 			crumb = {
 				:title => nil,
@@ -28,10 +28,10 @@
 			crumb.merge!(options)
 			breadcrumbs << crumb
 		end
-    
+
 	    # Action buttons.. should these be a seperate object?
-		
-		def action_button_groups 
+
+		def action_button_groups
 			@action_button_groups ||= []
 		end
 
@@ -43,11 +43,11 @@
 			action_button_groups.insert(position, group)
 			group
 		end
-		
+
 		def find_action_button_group(key)
 			action_button_groups.find{|g| g[:key] == key }
 		end
-		
+
 		def add_action_button(group_key, title, path, *args)
 			options = args.extract_options!
 			group = find_action_button_group(group_key) || add_action_button_group(group_key)
@@ -60,7 +60,7 @@
 				:options => options
 			})
 		end
-    
+
    		# Menu buttons.. should these be a seperate object?
 		def menu_groups
 			@menu_groups ||= []
@@ -71,14 +71,14 @@
 				:key => key,
 				:buttons => []
 			}
-			menu_groups.insert(position, group)
+			menu_groups.insert(position, group).compact!
 			group
 		end
-		
+
 		def find_menu_group(key)
 			menu_groups.find{|g| g[:key] == key }
 		end
-		
+
 		def add_menu_button(group_key, title, path, *args)
 			options = args.extract_options!
 			group = find_menu_group(group_key) || add_menu_group(group_key)
@@ -88,8 +88,8 @@
 				:path => path,
 				:icon => options.delete(:icon) || "wrench",
 				:class => (options[:class].present? ? "btn #{options.delete(:class)}" : "btn"),
-				:options => options
-			})
+				:options => (options || {})
+			}).compact!
 		end
 	end
 end

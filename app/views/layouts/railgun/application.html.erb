@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	
+
 	<!-- start: Meta -->
 	<meta charset="utf-8">
 	<title>Railgun</title>
 	<meta name="description" content="Railgun website platform">
 	<meta name="author" content="Tom Beynon // Lateral Studios">
 	<!-- end: Meta -->
-	
+
 	<!-- start: Mobile Specific -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- end: Mobile Specific -->
-	
+
 	<%= stylesheet_link_tag "railgun/application" %>
 	<% Railgun.config.register_stylesheets.each do |stylesheet| %>
 	<%= stylesheet_link_tag stylesheet %>
@@ -28,7 +28,7 @@
 	<!-- start: Favicon -->
 	<link rel="shortcut icon" href="/assets/railgun/optimus/favicon.ico">
 	<!-- end: Favicon -->
-		
+
 </head>
 
 <body class="<%= railgun_controller+" "+params[:action] %>">
@@ -42,7 +42,7 @@
 					<span class="icon-bar"></span>
 				</a>
 				<a class="brand" href="<%= root_path %>"><span><%= Railgun.config.site_name %></span></a>
-								
+
 				<!-- start: Header Menu -->
 				<% if false %>
 				<div class="btn-group pull-right" >
@@ -62,27 +62,31 @@
 					<!-- end: User Dropdown -->
 				</div>
 				<% end %>
-				<% 
-				menu_groups.each do |menu_group| %>
-					<div class="btn-group pull-right" >
+				<div class="pull-right">
+				<% menu_groups.each do |menu_group| %>
+					<div class="btn-group" >
 					<% menu_group[:buttons].each do |button| %>
-						<%= link_to button[:path], button[:options].merge({:class => button[:class]}) do %>
-							<i class="icon-<%= button[:icon] %>"></i><span class="hidden-phone hidden-tablet"> <%= button[:title] %></span>
+						<% if button[:options][:partial] %>
+							<%= render button[:options][:partial] %>
+						<% else %>
+							<%= link_to button[:path], button[:options].merge({:class => button[:class]}) do %>
+								<i class="icon-<%= button[:icon] %>"></i><span class="hidden-phone hidden-tablet"> <%= button[:title] %></span>
+							<% end %>
 						<% end %>
 					<% end %>
 					</div>
 				<% end %>
-				<!-- end: Header Menu -->
-				
+				</div>
+			<!-- end: Header Menu -->
 			</div>
 		</div>
 	</div>
 	<div id="under-header"></div>
 	<!-- start: Header -->
-	
+
 		<div class="container-fluid">
 		<div class="row-fluid">
-				
+
 			<!-- start: Main Menu -->
 			<div class="span2 main-menu-span">
 				<div class="nav-collapse sidebar-nav">
@@ -98,40 +102,40 @@
 				</div><!--/.well -->
 			</div><!--/span-->
 			<!-- end: Main Menu -->
-			
+
 			<noscript>
 				<div class="alert alert-block span10">
 					<h4 class="alert-heading">Warning!</h4>
 					<p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">javascript</a> enabled to use Railgun.</p>
 				</div>
 			</noscript>
-			
+
 			<div id="content" class="span10">
 			<!-- start: Content -->
-			
+
 			<div>
 				<%= render "railgun/shared/breadcrumb_list" %>
 			</div>
-			
+
 			<% if flash[:alert].present? %>
 			<div class="alert alert-error">
 				<button data-dismiss="alert" class="close" type="button">×</button>
 				<strong>Something went wrong.</strong> Check the form for more information.
 			</div>
 			<% end %>
-			
+
 			<% if flash[:notice].present? %>
 			<div class="alert alert-success">
 				<button data-dismiss="alert" class="close" type="button">×</button>
 				<%= flash[:notice] %>
 			</div>
 			<% end %>
-       
+
       <%= yield %>
-       
+
 			</div><!--/#content.span10-->
 				</div><!--/fluid-row-->
-				
+
 		<div class="modal hide fade" id="myModal">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">×</button>
@@ -145,21 +149,21 @@
 				<a href="#" class="btn btn-primary">Save changes</a>
 			</div>
 		</div>
-		
+
 		<div class="clearfix"></div>
 		<hr>
-		
+
 		<footer>
 			<p class="pull-left">&copy; <a href="" target="_blank">Lateral Studios</a> <%= Date.today.strftime("%Y") %></p>
 			<p class="pull-right"><a href="mailto:railgun@lateralstudios.com">Powered by <%= image_tag "railgun/railgun-small.png", alt: "Railgun", class: "logo" %></a></p>
 		</footer>
-				
+
 	</div><!--/.fluid-container-->
 
 	<%= javascript_include_tag "railgun/application" %>
 	<% Railgun.config.register_javascripts.each do |javascript| %>
 	<%= javascript_include_tag javascript %>
 	<% end %>
-	
+
 </body>
 </html>
