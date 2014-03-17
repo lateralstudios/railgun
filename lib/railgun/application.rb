@@ -19,8 +19,9 @@ module Railgun
 			self.config ||= Configuration.new
 		end
 
+		#TODO: move to helper
     def viewable_resources
-      resources.select{|key, r| r.viewable? }
+      resources.sort_by{|k,r|r.name}.select{|key, r| r.viewable? }
     end
 
 		def find_resource(symbol)
