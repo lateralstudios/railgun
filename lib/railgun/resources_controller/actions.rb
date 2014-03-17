@@ -16,7 +16,7 @@ module Railgun
 					add_crumb(:title => resource.send(railgun_resource.name_column), :path => [resource])
 					set_title("View "+railgun_resource.name)
 					add_action_button(:default, "Edit", [:edit, resource], :type => "info") if railgun_resource.default_actions.find{|a| a.key == :edit}
-					add_action_button(:destroy, "Delete", resource, 
+					add_action_button(:destroy, "Delete", resource,
 						:type => "danger", :method => :delete, :confirm => "Are you sure you want to delete this record?")  if railgun_resource.default_actions.find{|a| a.key == :destroy}
 					instance_exec format, &block if block_given?
 					format.html { render }
@@ -63,7 +63,7 @@ module Railgun
 					success.json { render :json => resource }
 				end
 			end
-			
+
       def self.included(base)
         base.instance_eval do
           alias_method :index!, :index
