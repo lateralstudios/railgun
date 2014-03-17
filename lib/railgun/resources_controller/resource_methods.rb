@@ -10,10 +10,20 @@ module Railgun
 		protected
 
 		def collection
-			railgun_collection
+			get_collection_ivar || begin
+        c = railgun_chain
+        if defined?(ActiveRecord::DeprecatedFinders)
+          # ActiveRecord::Base#scoped and ActiveRecord::Relation#all
+          # are deprecated in Rails 4. If it's a relation just use
+          # it, otherwise use .all to get a relation.
+          set_collection_ivar(c.is_a?(ActiveRecord::Relation) ? c : c.all)
+        else
+          set_collection_ivar(c.respond_to?(:scoped) ? c.scoped : c.all)
+        end
+      end
 		end
 
-		def railgun_collection
+		def railgun_chain
 			scope = inherited_chain
 			scope = scope.page(page).per(per_page) # Apply Kaminari pagination
 			scope
