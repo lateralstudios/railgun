@@ -12,7 +12,7 @@
 		end
 
 		def set_title(new_title)
-			title = new_title
+			@title = new_title
     end
 
 		def breadcrumbs
