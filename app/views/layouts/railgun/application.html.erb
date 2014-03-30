@@ -4,7 +4,7 @@
 
 	<!-- start: Meta -->
 	<meta charset="utf-8">
-	<title><%= title %> : Railgun : <%= Railgun.config.site_name %></title>
+	<title><%= [title, "Railgun", Railgun.config.site_name].reject(&:blank?).join(" - ") %></title>
 	<meta name="description" content="Railgun website platform">
 	<meta name="author" content="Tom Beynon // Lateral Studios">
 	<!-- end: Meta -->
