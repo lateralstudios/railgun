@@ -1,10 +1,10 @@
 module Railgun
-	class Resource
-		module Scopes
-			
+  class Resource
+    module Scopes
+
       attr_accessor :scopes
 
-			def initialize(*args)
+      def initialize(*args)
         super
         prepare_scopes
       end
@@ -18,7 +18,7 @@ module Railgun
       end
 
     protected
-			
+
       def prepare_scopes
         @scopes = []
         DEFAULT_SCOPES.each do |key, options|
@@ -26,19 +26,19 @@ module Railgun
         end
       end
 
-		end
-	end
-	
-	class Scope
-			
-		attr_accessor :key, :default, :options
-		
-		def initialize(key, options={})
-			@key = key.to_sym
-			@default = false
+    end
+  end
+
+  class Scope
+
+    attr_accessor :key, :default, :options
+
+    def initialize(key, options={})
+      @key = key.to_sym
+      @default = false
       @options = {}
       parse_options(options)
-		end
+    end
 
     def name
       (options[:as] || key).to_s.humanize
@@ -53,6 +53,6 @@ module Railgun
       @default = options.delete(:default) if options.has_key?(:default)
       @options.merge!(options)
     end
-		
-	end
+
+  end
 end

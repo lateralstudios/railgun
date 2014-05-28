@@ -1,13 +1,13 @@
 module Railgun
-	class Resource
-		module Actions
+  class Resource
+    module Actions
 
       attr_accessor :actions, :member_actions, :collection_actions
 
-			def initialize(*args)
+      def initialize(*args)
         super
-				prepare_actions
-			end
+        prepare_actions
+      end
 
       def action(key, type, options={}, &block)
         existing = actions.find{|a|a.key == key}
@@ -39,34 +39,34 @@ module Railgun
       end
 
     protected
-			
-			def prepare_actions
-				@actions = []
+
+      def prepare_actions
+        @actions = []
         DEFAULT_ACTIONS.clone.each do |key, options|
           action key, :default
         end
-			end
-			
-		end
-	end
-	
-	class Action
-		
-		attr_accessor :key, :type, :options, :block
-		
-		def initialize(key, type, options={}, &block)
-			@key = key.to_sym
+      end
+
+    end
+  end
+
+  class Action
+
+    attr_accessor :key, :type, :options, :block
+
+    def initialize(key, type, options={}, &block)
+      @key = key.to_sym
       @type = type.to_sym
-			@options = options
-			@block = block
-		end
-		
-		def update(type, options={}, &block)
+      @options = options
+      @block = block
+    end
+
+    def update(type, options={}, &block)
       @type = type.to_sym
-			@options.merge!(options)
-			@block = block if block
-		end
-		
-	end
-	
+      @options.merge!(options)
+      @block = block if block
+    end
+
+  end
+
 end

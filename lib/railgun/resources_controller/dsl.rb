@@ -10,7 +10,7 @@ module Railgun
       def option key, value
         railgun_resource.options[key] = value
       end
-
+      
       #TODO override resource_class
       def model klass
         # TODO Resource keys
@@ -47,7 +47,7 @@ module Railgun
             railgun_resource.batch_actions.reject!{|b| b.key == :batch_delete }
           end
         end
-          # Need to undef methods
+        # Need to undef methods
       end
 
       def member_action(key, options = {}, &block)

@@ -1,42 +1,42 @@
 module Railgun
-	module Helpers
+  module Helpers
 
-		def self.included(base)
-			base.extend(ClassMethods)
-			base.send :include, InstanceMethods
-			base.instance_eval do
-				layout 'railgun/application'
-				before_filter :validate_admin
-				before_filter :prepare
-				helper_method :site_name, :railgun_controller
-			end
+    def self.included(base)
+      base.extend(ClassMethods)
+      base.send :include, InstanceMethods
+      base.instance_eval do
+        layout 'railgun/application'
+        before_filter :validate_admin
+        before_filter :prepare
+        helper_method :site_name, :railgun_controller
+      end
     end
 
-		module ClassMethods
+    module ClassMethods
 
-		end
+    end
 
-  	module InstanceMethods
+    module InstanceMethods
 
-	  	def site_name
-	  		Railgun.config.site_name
-	  	end
+      def site_name
+        Railgun.config.site_name
+      end
 
-	  	def railgun_controller
-	  		params[:controller].split("railgun/").last
-	  	end
+      def railgun_controller
+        params[:controller].split("railgun/").last
+      end
 
-	  	def prepare
+      def prepare
 
-	  	end
+      end
 
-	  	def validate_admin
-	  		self.send(Railgun.application.config.authenticate_method) if Railgun.application.config.authenticate_method
-	  	end
+      def validate_admin
+        self.send(Railgun.application.config.authenticate_method) if Railgun.application.config.authenticate_method
+      end
 
-  	end
+    end
 
-	end
+  end
 end
 
 # Add our ellipsisize method to String
