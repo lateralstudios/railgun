@@ -1,15 +1,24 @@
 module Railgun
   module ResourceHelper
-  	
+
+    def format_attribute(resource, attribute)
+      association = railgun_resource.association_for(attribute)
+      if association
+        format_association_attribute(resource, attribute, association)
+      else
+        resource.try(attribute.key)
+      end
+    end
+
   	def short_format_attribute(resource, attribute)
       association = railgun_resource.association_for(attribute)
       if association
-        return short_format_association_attribute(resource, attribute, association)
+        return format_association_attribute(resource, attribute, association)
       end
 
-  		case attribute.type
-  		when :string
-  			value = short_format_string_attribute(resource, attribute)
+      case attribute.type
+      when :string
+        value = short_format_string_attribute(resource, attribute)
   		when :text
   			value = short_format_text_attribute(resource, attribute)
   		when :datetime
@@ -27,9 +36,9 @@ module Railgun
       else
         render :partial => "railgun/resources/fields/"+attribute.type.to_s, :locals => {:form => form, :column => attribute, :resource => resource}
       end
-    end 
+    end
 
-    def short_format_association_attribute(resource, attribute, association)
+    def format_association_attribute(resource, attribute, association)
       value = resource.send(attribute.key)
       if value.present? && association.type == :belongs_to
         # Need to use custom finder
@@ -38,17 +47,17 @@ module Railgun
         parent.send(name_column)
       end
     end
-  	
+
   	def short_format_string_attribute(resource, attribute)
   		method = attribute.key
   		if resource.respond_to?(method)
-	  		resource_method = resource.method(method)
+    		resource_method = resource.method(method)
         value = resource_method.call
         return nil if value.nil?
   			if resource_method.call.respond_to?(:thumb)
   				value = content_tag :div, :class => "string-image-content" do
   					link_to resource_method.call.url, :target => "_blank" do
-  						image_tag(resource_method.call.thumb.url) + 
+  						image_tag(resource_method.call.thumb.url) +
   						content_tag(:p, File.basename(resource_method.call.path).ellipsisize(8,8))
   					end
   				end
@@ -62,20 +71,20 @@ module Railgun
   			nil
   		end
   	end
-  	
+
   	def short_format_text_attribute(resource, attribute)
   		value = resource.try(attribute.key)
   		truncate(value, :length => 100, :separator => ' ')
   	end
-  	
+
   	def short_format_datetime_attribute(resource, attribute)
   		value = resource.try(attribute.key)
   		pretty_datetime(value)
   	end
-  	
+
   	def pretty_datetime(value)
   		value.strftime("%d/%m/%y %H:%M:%S") unless value.nil?
   	end
-  	
+
   end
 end

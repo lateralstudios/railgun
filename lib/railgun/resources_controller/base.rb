@@ -1,51 +1,48 @@
 module Railgun
-		module Base
+  module Base
+    def self.included(base)
+      base.instance_eval do
 
-			def self.included(base)
-				base.instance_eval do
+        before_filter :prepare_layout
+        helper 'railgun/resource'
 
-					before_filter :prepare_layout
-					helper 'railgun/resource'
+        helper_method :columns
+        helper_method :viewable_columns
+        helper_method :editable_columns
+        helper_method :per_page
+        helper_method :page
+      end
+    end
 
-					helper_method :columns
-					helper_method :viewable_columns
-					helper_method :editable_columns
-					helper_method :per_page
-					helper_method :page
+    protected
 
-				end
-	    end
+    def columns
+      @columns ||= railgun_resource.attributes
+    end
 
-		protected
+    def viewable_columns
+      @viewable_columns ||= railgun_resource.viewable_columns
+    end
 
-		def columns
-			@columns ||= railgun_resource.columns
-		end
+    def editable_columns
+      @editable_columns ||= railgun_resource.editable_columns
+    end
 
-		def viewable_columns
-			@viewable_columns ||= railgun_resource.viewable_columns
-		end
+    def per_page
+      params[:per] || 25
+    end
 
-		def editable_columns
-			@editable_columns ||= railgun_resource.editable_columns
-		end
+    def page
+      (params[:page] || 1).to_i
+    end
 
-		def per_page
-			params[:per] || 25
-		end
+    private
 
-		def page
-			(params[:page] || 1).to_i
-		end
-
-	private
-
-		def prepare_layout
-			if railgun_resource.nil?
-				raise "Not found" # TODO: Should be not_found
-			end
-			add_crumb(:title => railgun_resource.name.pluralize, :path => [railgun_resource.resource_class])
-		end
-
-	end
+    def prepare_layout
+      if railgun_resource.nil?
+        raise "Not found" # TODO: Should be not_found
+      end
+      add_crumb(:title => railgun_resource.name.pluralize, :path => [railgun_resource.resource_class])
+    end
+  end
 end

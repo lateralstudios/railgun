@@ -31,7 +31,7 @@ module Railgun
       end
 
     protected
-      
+
       def prepare_attributes
         @attributes = []
 
@@ -50,15 +50,15 @@ module Railgun
           end
         end
       end
-      
+
     end
   end
-  
+
   class Attribute
-    
+
     attr_accessor :key, :viewable, :editable, :type, :association, :column, :options
-    
-    # attribute :owner, {:viewable => true, :editable => false, 
+
+    # attribute :owner, {:viewable => true, :editable => false,
     #           :type => :integer, :column => AR_Column
     def initialize(key, options={})
       @key = key.to_sym
@@ -87,7 +87,7 @@ module Railgun
       @column = options.delete(:column) if options.has_key?(:column)
       @options.merge!(options)
     end
-    
+
   end
-  
+
 end
