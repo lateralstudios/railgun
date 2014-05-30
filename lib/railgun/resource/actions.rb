@@ -2,7 +2,7 @@ module Railgun
   class Resource
     module Actions
 
-      attr_accessor :actions, :member_actions, :collection_actions
+      attr_accessor :actions
 
       def initialize(*args)
         super
@@ -14,16 +14,16 @@ module Railgun
         if existing
           existing.update(type, options, &block)
         else
-          actions << Action.new(key, type, options, &block)
+          self.actions << Action.new(key, type, options, &block)
         end
       end
 
       def member_action(key, options = {}, &block)
-        actions << Railgun::Action.new(key, :member, options, &block)
+        self.actions << Railgun::Action.new(key, :member, options, &block)
       end
 
       def collection_action(key, options = {}, &block)
-        actions << Railgun::Action.new(key, :collection, options, &block)
+        self.actions << Railgun::Action.new(key, :collection, options, &block)
       end
 
       def default_actions

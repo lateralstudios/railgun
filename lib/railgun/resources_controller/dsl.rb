@@ -10,7 +10,7 @@ module Railgun
       def option key, value
         railgun_resource.options[key] = value
       end
-      
+
       #TODO override resource_class
       def model klass
         # TODO Resource keys
