@@ -17,7 +17,7 @@ module Railgun
     DEFAULT_NAME_COLUMNS = [:title, :name, :username, :id]
 
     attr_accessor :resource_class, :options,
-    :sort_order, :key, :controller
+                  :key, :controller
 
     module Base
       def initialize(resource_class, controller, options = {})
@@ -37,7 +37,8 @@ module Railgun
     def default_options
       options = {
         :icon => "folder-open",
-        :sort_order => Railgun.application.resources.count + 1
+        :sort_order => Railgun.application.resources.count + 1,
+        :searchable => false
       }
     end
 
@@ -59,6 +60,10 @@ module Railgun
 
     def viewable?
       actions.any?{|a| a.key == :index}
+    end
+
+    def searchable?
+      options[:searchable]
     end
 
     def sort_order

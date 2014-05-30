@@ -1,17 +1,4 @@
 <div id="resource_filters" class="row-fluid sortable">
-	<div class="btn-toolbar pull-left">
-		<div class="btn-group">
-			<% railgun_resource.scopes.each do |scope| %>
-	    <%= link_to scope.name, params.merge({:scope => scope.key.to_s}), :class => "btn #{'active' if current_scope == scope.key}" %>
-	    <% end %>
-	  </div>
-	</div> 
-	<!--
-	<form class="form-search pull-right">
-		<div class="input-append">
-	  	<input type="text" class="input-medium search-query" placeholder="Keywords">
-	  	<button type="submit" class="btn">Search</button>
-		</div>
-	</form>
-	-->
+	<%= render "scopes" %>
+	<%= render "search" if railgun_resource.searchable? %> 
 </div>
