@@ -6,6 +6,7 @@ require "kaminari"
 require "railgun/application"
 require "railgun/configuration"
 require "railgun/resource"
+require "railgun/router"
 require "railgun/engine"
 
 ####
@@ -48,6 +49,10 @@ module Railgun
 	def self.config
 		application.config
 	end
+
+  def self.routes
+    application.routes
+  end
 
 	def self.resources
   	application.resources

@@ -19,6 +19,10 @@ module Railgun
       self.config ||= Configuration.new
     end
 
+    def router
+      @router ||= Router.new(self)
+    end
+
     #TODO: move to helper
     def viewable_resources
       resources.sort_by{|k,r|r.name}.select{|key, r| r.viewable? }
@@ -48,6 +52,12 @@ module Railgun
       resources[key]
     end
 
+    def routes
+      puts 'loading routes'
+      load_railgun
+      router.load
+    end
+
     def prepare_reloader
       unless Rails.application.config.cache_classes
         config.load_paths.each do |path|
@@ -65,7 +75,7 @@ module Railgun
     def reload_railgun!
       unload_railgun
       load_railgun
-      Rails.application.reload_routes!
+      router.reload
     end
 
     def load_railgun
