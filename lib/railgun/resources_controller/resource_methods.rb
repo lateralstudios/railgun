@@ -26,14 +26,23 @@ module Railgun
       end
     end
 
+    def resource
+      get_resource_ivar || set_resource_ivar(end_of_railgun_chain.send(method_for_find, params[:id]))
+    end
+
+    def build_resource
+      get_resource_ivar || set_resource_ivar(end_of_railgun_chain.send(method_for_build, *resource_params))
+    end
+
     def paginated_chain
       scope = end_of_railgun_chain
+      scope = scope.order('created_at DESC')
       scope = scope.page(page).per(per_page) # Apply Kaminari pagination
       scope
     end
 
     def end_of_railgun_chain
-      railgun_chain.order('created_at DESC')
+      railgun_chain
     end
 
     def railgun_chain
