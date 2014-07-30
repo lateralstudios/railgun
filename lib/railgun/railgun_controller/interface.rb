@@ -57,6 +57,7 @@
         :path => path,
         :type => options.delete(:type) || "info",
         :class => options.delete(:class) || "",
+        :view => options.delete(:view),
         :options => options
       })
     end

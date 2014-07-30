@@ -3,7 +3,11 @@
   <% action_button_groups.reverse.each do |group| %>
   <div class="btn-group">
     <% group[:buttons].each do |button| %>
-    <%= link_to(button[:title], button[:path], button[:options].merge({:class => "btn btn-small btn-"+button[:type]+" "+button[:class]})) %>
+      <% if button[:view] %>
+        <%= render button[:view], button: button %>
+      <% else %>
+        <%= link_to(button[:title], button[:path], button[:options].merge({:class => "btn btn-small btn-"+button[:type]+" "+button[:class]})) %>
+      <% end %>
     <% end %>
   </div>
   <% end %>
