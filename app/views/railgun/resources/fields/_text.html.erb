@@ -1,1 +1,1 @@
-<%= form.input column.name, :input_html => {:class => "input-xlarge",:rows => 4} %>
+<%= form.input column.name, :input_html => {:class => [column.options[:class], "input-xlarge"].flatten.join(" "), :rows => 4} %>
