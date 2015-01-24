@@ -42,7 +42,7 @@ module Railgun
       value = resource.send(attribute.key)
       if value.present? && association.type == :belongs_to
         # Need to use custom finder
-        parent = association.klass.find(resource.send(attribute.key))
+        parent = association.klass.unscoped.find(resource.send(attribute.key))
         name_column = Railgun::Resource::DEFAULT_NAME_COLUMNS.find{|col| parent.respond_to? col }
         parent.send(name_column)
       end
