@@ -23,6 +23,8 @@ module Railgun
         value = short_format_text_attribute(resource, attribute)
       when :datetime
         value = short_format_datetime_attribute(resource, attribute)
+      when :boolean
+        value = short_format_boolean_attribute(resource, attribute)
       else
         value = resource.try(attribute.name.to_sym)
       end
@@ -80,6 +82,11 @@ module Railgun
     def short_format_datetime_attribute(resource, attribute)
       value = resource.try(attribute.key)
       pretty_datetime(value)
+    end
+
+    def short_format_boolean_attribute(resource, attribute)
+      value = resource.try(attribute.key)
+      value ? 'Yes' : 'No'
     end
 
     def pretty_datetime(value)
