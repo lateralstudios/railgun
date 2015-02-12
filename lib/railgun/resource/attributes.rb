@@ -13,9 +13,9 @@ module Railgun
         existing = attributes.find{|a|a.key == key}
         if existing
           new_position = options.delete(:position)
-          existing.update(options)
           if new_position
             attributes.insert(new_position, attributes.delete(existing))
+            existing.update(options)
           end
         else
           if new_position = options.delete(:position)
