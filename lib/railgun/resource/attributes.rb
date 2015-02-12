@@ -13,15 +13,17 @@ module Railgun
         existing = attributes.find{|a|a.key == key}
         if existing
           new_position = options.delete(:position)
+          existing.update(options)
           if new_position
             attributes.insert(new_position, attributes.delete(existing))
-            existing.update(options)
           end
         else
-          if new_position = options.delete(:position)
-            attributes.insert(new_position, Railgun::Attribute.new(key, options))
+          new_position = options.delete(:position)
+          if !new_position.nil?
+            new_position = attributes.length < new_position ? attributes.length : new_position
+            self.attributes.insert(new_position, Railgun::Attribute.new(key, options))
           else
-            attributes << Railgun::Attribute.new(key, options)
+            self.attributes << Railgun::Attribute.new(key, options)
           end
         end
       end
