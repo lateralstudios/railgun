@@ -23,6 +23,8 @@ module Railgun
         value = short_format_text_attribute(resource, attribute)
       when :datetime
         value = short_format_datetime_attribute(resource, attribute)
+      when :date
+        value = short_format_date_attribute(resource, attribute)
       when :boolean
         value = short_format_boolean_attribute(resource, attribute)
       else
@@ -77,6 +79,11 @@ module Railgun
     def short_format_text_attribute(resource, attribute)
       value = resource.try(attribute.key)
       truncate(value, :length => 100, :separator => ' ')
+    end
+
+    def short_format_date_attribute(resource, attribute)
+      value = resource.try(attribute.key)
+      value.strftime("%d/%m/%Y") unless value.nil?
     end
 
     def short_format_datetime_attribute(resource, attribute)
